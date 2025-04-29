@@ -56,6 +56,7 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
 
      var body: some View {
          VStack {
+             // not working with list
              List {
                  if viewModel.items.isEmpty {
                      EmptyItemView()

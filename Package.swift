@@ -10,33 +10,26 @@ let package = Package(
         .library(name: "SwiftLens", targets: ["SwiftLens"]),
         .library(name: "SwiftLensTestSupport", targets: ["SwiftLensTestSupport"]),
     ],
-    dependencies: [
-        .package(url: "https://github.com/nalexn/ViewInspector.git", from: "0.10.1"),
-    ],
+    dependencies: [],                                 // ← hier
     targets: [
         .target(
             name: "SwiftLens",
             swiftSettings: [
                 .unsafeFlags(["-swift-version", "5.5"])
-            ]),
+            ]
+        ),
         .target(
             name: "SwiftLensTestSupport",
-            dependencies: [
-                "SwiftLens",  // Test support depends on main
-                .product(name: "ViewInspector", package: "ViewInspector")
-            ],
-            path: "Sources/SwiftLensTestSupport"  // different folder!
+            dependencies: ["SwiftLens"],
+            path: "Sources/SwiftLensTestSupport"
         ),
         .testTarget(
             name: "SwiftLensTests",
-            dependencies: [
-                "SwiftLens",
-                "SwiftLensTestSupport",
-                .product(name: "ViewInspector", package: "ViewInspector")
-            ],
+            dependencies: ["SwiftLens", "SwiftLensTestSupport"],
             swiftSettings: [
                 .unsafeFlags(["-swift-version", "5.5"])
             ]
-        ),
-    ]
-)
+        )
+    ]                                                  // ← schließe das Array
+)                                                      // ← und den Package-Aufruf
+
