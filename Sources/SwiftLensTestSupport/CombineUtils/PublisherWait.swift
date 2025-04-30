@@ -36,7 +36,7 @@ import Foundation
 import Combine
 
 extension Published.Publisher where Value: Equatable {
-    func waitUntilMatches(
+  public func waitUntilMatches(
          _ target: Value,
          errorMessage: String,
          timeout: TimeInterval = 1.0
@@ -46,7 +46,7 @@ extension Published.Publisher where Value: Equatable {
                                          timeout: timeout)
      }
     
-    func waitUntilMatches(
+  public func waitUntilMatches(
         _ predicate: @escaping (Value) -> Bool,
         errorMessage: String,
         timeout: TimeInterval = 1.0
@@ -82,15 +82,15 @@ extension Published.Publisher where Value: Equatable {
 }
 
 
-struct TestTimeoutError: Error, Equatable {}
+public struct TestTimeoutError: Error, Equatable {}
 
-enum WaitUntilError: Error, CustomStringConvertible, Equatable {
+public enum WaitUntilError: Error, CustomStringConvertible, Equatable {
     case timeout(description: String)
     
-    var description: String {
+    public var description: String {
         switch self {
-        case .timeout(let message):
-            return "⏰ Timeout: \(message)"
+            case .timeout(let message):
+                return "⏰ Timeout: \(message)"
         }
     }
 }

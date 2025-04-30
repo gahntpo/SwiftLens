@@ -8,22 +8,30 @@ import SwiftUI
 import SwiftLens
 
 @MainActor
-struct UIUnderTest {
+public struct UIUnderTest {
     
-    let simulator: UIEventSimulator
-    let observer: UIObservationLens
-    private let functionName: String
+    public let simulator: UIEventSimulator
+    public let observer: UIObservationLens
     
-    init<Content: View>(
-        @ViewBuilder content: (_ sut: UIUnderTest) -> Content,
-        function: String = #function
+    private var window: UIWindow
+    
+    public init<Content: View>(
+        @ViewBuilder content: (_ sut: UIUnderTest) -> Content
     ) {
         let expectations = UIObservationLens()
         let notificationCenter = NotificationCenter()
-        self.functionName = function
         
         self.simulator = UIEventSimulator(notificationCenter: notificationCenter)
         self.observer = expectations
+        
+        self.window = {
+            let frame = UIScreen.main.bounds
+            let window = UIWindow(frame: frame)
+            let rootVC = UIViewController()
+            window.rootViewController = rootVC
+            window.makeKeyAndVisible()
+            return window
+        }()
         
         let rootView = content(self)
             .environment(\.notificationCenter, notificationCenter)
@@ -31,7 +39,27 @@ struct UIUnderTest {
                 expectations.values = metas
             }
         
-        // Use Task to call the @MainActor host method
-        ViewHosting.host(view: rootView, function: function)
+
+        let hostingController = UIHostingController(rootView: rootView)
+        
+        // Add as child of root view controller
+        let rootVC = window.rootViewController!
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Add to parent
+        hostingController.willMove(toParent: rootVC)
+        rootVC.addChild(hostingController)
+        rootVC.view.addSubview(hostingController.view)
+        
+        // Setup constraints
+        NSLayoutConstraint.activate([
+            hostingController.view.leadingAnchor.constraint(equalTo: rootVC.view.leadingAnchor),
+            hostingController.view.topAnchor.constraint(equalTo: rootVC.view.topAnchor),
+            hostingController.view.widthAnchor.constraint(equalTo: rootVC.view.widthAnchor),
+            hostingController.view.heightAnchor.constraint(equalTo: rootVC.view.heightAnchor)
+        ])
+        
+        hostingController.didMove(toParent: rootVC)
+        window.layoutIfNeeded()
     }
 }

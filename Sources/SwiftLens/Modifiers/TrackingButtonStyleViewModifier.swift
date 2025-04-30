@@ -14,13 +14,19 @@ extension Button {
 
 extension NavigationLink {
     public func trackButton(accessibilityIdentifier: String) -> some View {
-        self.buttonStyle(TrackingButtonStyle(accessibilityIdentifier: accessibilityIdentifier))
+        self
+            .buttonStyle(TrackingButtonStyle(accessibilityIdentifier: accessibilityIdentifier))
+            // need to apply preferences outside button style because navigationlink does not pass them
+            .preferenceTracking(
+                identifier: accessibilityIdentifier,
+                viewName: String(describing: Self.self)
+            )
     }
 }
 
 //TODO: EditButton, Link, Menu, MenuButton, PasteButton, RenameButton, ShareLink, SignInWithAppleButton
 
-// Compatibily with custom button styling
+// Compatible with custom button styling
 
 public struct TrackingButtonStyle: PrimitiveButtonStyle {
 

@@ -34,7 +34,7 @@ public struct ViewMetadata: Equatable {
 extension ViewMetadata: CustomStringConvertible {
     public var description: String {
         // single‐line, concise:
-        "\(viewName) { id: “\(identifier)”, value: \(info) }"
+        "\(viewName) { id: “\(identifier)”, value: \(info), children: \(children.count)}"
         
         // — or, for a multi‐line style, swap the above for this:
         /*
@@ -72,41 +72,18 @@ extension Array where Element == ViewMetadata {
     public func value(forViewID id: String, key: String) -> AnyHashable? {
         findView(withID: id)?.info[key]
     }
+    
+    public func flattened() -> [ViewMetadata] {
+        flatMap { [$0] + $0.children.flattened() }
+    }
 }
 
-
 public struct ViewMetadataKey: PreferenceKey {
-     public static var defaultValue: [ViewMetadata] = []
-    //public static var defaultValue: [ViewMetadata] { [] }
+    public static var defaultValue: [ViewMetadata] = []
+    
     public static func reduce(value: inout [ViewMetadata], nextValue: () -> [ViewMetadata]) {
         value.append(contentsOf: nextValue())
     }
 }
 
-public struct ViewMetadataModifier: ViewModifier {
-    public let viewName: String
-    public let viewType: String
-    public let identifier: String
-    public  let info: [String: AnyHashable]
-    
-    public init(viewName: String,
-         viewType: String,
-         identifier: String,
-         info: [String : AnyHashable] = [:]) {
-        self.viewName = viewName
-        self.viewType = viewType
-        self.identifier = identifier
-        self.info = info
-    }
-    
-    public func body(content: Content) -> some View {
-        content
-            .accessibilityIdentifier(identifier)
-            .preference(key: ViewMetadataKey.self,
-                        value: [ViewMetadata(viewName: viewName,
-                                             viewType: viewType,
-                                             identifier: identifier,
-                                             info: info)])
-    }
-}
 

@@ -57,7 +57,7 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
      var body: some View {
          VStack {
              // not working with list
-             List {
+             LensList {
                  if viewModel.items.isEmpty {
                      EmptyItemView()
                          .preferenceTracking(identifier: "demo_items_empty_placeholder",
@@ -83,6 +83,12 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
              .disabled(viewModel.items.isEmpty)
              
          }
+         .transformPreferenceTracking(identifier: "demo.list",
+                                      viewName: "DemoButtonView")
+         
+         // This will overwrite the child preference keys:
+         //.preferenceTracking(identifier: "demo_listr",
+         //                    viewName: String(describing: Self.self))
      }
 }
 

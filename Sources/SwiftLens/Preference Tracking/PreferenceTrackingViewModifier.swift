@@ -9,13 +9,15 @@ import SwiftUI
 
 extension View {
     public func preferenceTracking(identifier: String,
-                  viewName: String,
-                  info: [String: AnyHashable] = [:]) -> some View {
-        let viewType = String(describing: Self.self)  // `Self` here is the *concrete* view type you call this on
-        return modifier(ViewMetadataModifier(viewName: viewName,
-                                             viewType: viewType,
+                                   viewName: String,
+                                   info: [String: AnyHashable] = [:]) -> some View {
+       
+        self.preference(key: ViewMetadataKey.self,
+                        value: [ViewMetadata(viewName: viewName,
+                                             viewType: String(describing: Self.self),
                                              identifier: identifier,
-                                             info: info))
+                                             info: info)])
+        .accessibilityIdentifier(identifier)
     }
     
     //TODO: make this useful and test

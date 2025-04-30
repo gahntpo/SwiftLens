@@ -65,7 +65,7 @@ struct DemoButtonViewTests {
             vm.items = [] // Remove all items
             
             // ---- THEN: Updates to View ----
-            try await sut.observer.waitForViewCount(WithViewIDPrefix: "item.", expected: 0)
+            try await sut.observer.waitForViewCount(withViewIDPrefix: "item.", expected: 0)
             
             try await sut.observer.waitForViewVisible(withID: "demo_items_empty_placeholder")
         }
@@ -83,7 +83,7 @@ struct DemoButtonViewTests {
             vm.items = [] // Remove all items
             
             // ---- THEN: Updates to View ----
-            try await sut.observer.waitForViewCount(WithViewIDPrefix: "item.", expected: 0)
+            try await sut.observer.waitForViewCount(withViewIDPrefix: "item.", expected: 0)
             
             #expect(sut.observer.containsView(withID: "RemoveLastButton"))
             #expect(sut.observer.isDisabledState(forViewID: "RemoveLastButton"))
@@ -159,7 +159,7 @@ struct DemoButtonViewTests {
             
             // ---- THEN: Updates to View ----
             try await sut.observer.waitForViewHidden(withID: "item.\(removedId)")   // only one of this is necessary for waiting
-            try await sut.observer.waitForViewCount(WithViewIDPrefix: "item.", expected: 2)
+            try await sut.observer.waitForViewCount(withViewIDPrefix: "item.", expected: 2)
             
             for item in vm.items {
                 #expect(sut.observer.containsView(withID: "item.\(item.id)"))
@@ -188,7 +188,7 @@ struct DemoButtonViewTests {
             #expect(vm.items.count == 1)
             
             // ---- THEN: Updates to View ----
-            try await sut.observer.waitForViewCount(WithViewIDPrefix: "item.", expected: 1)
+            try await sut.observer.waitForViewCount(withViewIDPrefix: "item.", expected: 1)
             
             #expect(sut.observer.enabledState(forViewID: "RemoveLastButton") == true)
         }
@@ -211,7 +211,7 @@ struct DemoButtonViewTests {
             #expect(vm.items.isEmpty)
             
             // ---- THEN: Updates to View ----
-            try await sut.observer.waitForViewCount(WithViewIDPrefix: "item.", expected: 0)
+            try await sut.observer.waitForViewCount(withViewIDPrefix: "item.", expected: 0)
             
             #expect(sut.observer.enabledState(forViewID: "RemoveLastButton") == false)
             #expect(sut.observer.isDisabledState(forViewID: "RemoveLastButton"))
