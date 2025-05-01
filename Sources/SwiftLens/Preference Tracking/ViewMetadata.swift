@@ -34,7 +34,7 @@ public struct ViewMetadata: Equatable {
 extension ViewMetadata: CustomStringConvertible {
     public var description: String {
         // single‐line, concise:
-        "\(viewName) { id: “\(identifier)”, value: \(info), children: \(children.count)}"
+        "\(viewName) { id: “\(identifier)”\(info.isEmpty ? "" : ", value: \(info)")\(children.isEmpty ? "" : ", children: \(children.count)")}"
         
         // — or, for a multi‐line style, swap the above for this:
         /*
