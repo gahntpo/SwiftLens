@@ -23,8 +23,16 @@ final class UIObservationLens: ObservableObject {
         values.containsNotView(withID: id)
     }
     
-    public func viewCountWithViewID(prefix: String) -> Int {
-        values.flattened().filter { $0.identifier.hasPrefix(prefix) }.count
+    public func containsNotView(withIDPrefix: String) -> Bool {
+        viewCount(withIDPrefix: withIDPrefix) == 0
+    }
+    
+    public func containsView(withIDPrefix: String) -> Bool {
+        viewCount(withIDPrefix: withIDPrefix) > 1
+    }
+    
+    public func viewCount(withIDPrefix: String) -> Int {
+        values.flattened().filter { $0.identifier.hasPrefix(withIDPrefix) }.count
     }
     
     public func value(forViewID id: String, key: String) -> AnyHashable? {

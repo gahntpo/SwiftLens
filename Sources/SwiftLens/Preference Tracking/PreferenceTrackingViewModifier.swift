@@ -11,7 +11,6 @@ extension View {
     public func preferenceTracking(identifier: String,
                                    viewName: String,
                                    info: [String: AnyHashable] = [:]) -> some View {
-       
         self.preference(key: ViewMetadataKey.self,
                         value: [ViewMetadata(viewName: viewName,
                                              viewType: String(describing: Self.self),
@@ -34,6 +33,5 @@ extension View {
                                  children: metadata)
             ]
         }
-        
     }
 }

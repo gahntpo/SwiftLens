@@ -62,4 +62,10 @@ public struct UIUnderTest {
         hostingController.didMove(toParent: rootVC)
         window.layoutIfNeeded()
     }
+    
+    //MARK: - interactions
+    func waitForAndTap(_ id: String) async throws {
+        try await self.observer.waitForViewVisible(withID: id)
+        self.simulator.buttonTap(withID: id)
+    }
 }
