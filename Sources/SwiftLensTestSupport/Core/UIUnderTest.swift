@@ -13,7 +13,13 @@ public struct UIUnderTest {
     public let simulator: UIEventSimulator
     public let observer: UIObservationLens
     
-    private var window: UIWindow
+    public var window: UIWindow
+    
+    public var view: UIView? {
+        window.rootViewController?.view
+    }
+    
+    public var hostingController: UIViewController?
     
     public init<Content: View>(
         @ViewBuilder content: (_ sut: UIUnderTest) -> Content
@@ -33,13 +39,14 @@ public struct UIUnderTest {
             return window
         }()
         
+        
         let rootView = content(self)
             .environment(\.notificationCenter, notificationCenter)
             .onPreferenceChange(ViewMetadataKey.self) { metas in
                 expectations.values = metas
             }
         
-
+        /*
         let hostingController = UIHostingController(rootView: rootView)
         
         // Add as child of root view controller
@@ -61,6 +68,22 @@ public struct UIUnderTest {
         
         hostingController.didMove(toParent: rootVC)
         window.layoutIfNeeded()
+        
+         */
+      
+         let hostingController = UIHostingController(rootView: rootView)
+         self.hostingController = hostingController
+         
+         // Create a navigation controller and set it as the window's root
+         let navController = UINavigationController(rootViewController: hostingController)
+         window.rootViewController = navController
+         
+         // Force layout
+         window.layoutIfNeeded()
+         
+         // Give the SwiftUI view a chance to update its state
+        // RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.1))
+        
     }
     
     //MARK: - interactions

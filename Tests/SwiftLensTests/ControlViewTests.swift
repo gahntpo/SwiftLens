@@ -3,7 +3,7 @@ import Testing
 @testable import SwiftLens
 @testable import SwiftLensTestSupport
 
-struct SwiftLensTests {
+struct ControlViewTests {
     
     @Suite("Test Demo Toggle View")
     struct ToggleTests {

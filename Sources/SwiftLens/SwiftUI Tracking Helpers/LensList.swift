@@ -96,36 +96,3 @@ extension LensList {
         self.init(content: ForEach(data, id: \.id, content: rowContent))
     }
 }
-
-// Example usage:
-
-// Using direct content:
-struct DirectContentExample: View {
-    var body: some View {
-        LensList {
-            Text("Item 1")
-            Text("Item 2")
-            Text("Item 3")
-        }
-    }
-}
-
-// Using data with ForEach:
-struct DataExample: View {
-    struct Item: Identifiable {
-        let id = UUID()
-        let title: String
-    }
-    
-    let items = [
-        Item(title: "First item"),
-        Item(title: "Second item"),
-        Item(title: "Third item")
-    ]
-    
-    var body: some View {
-        LensList(items) { item in
-            Text(item.title)
-        }
-    }
-}

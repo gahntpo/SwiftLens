@@ -165,7 +165,7 @@ struct DemoButtonViewTests {
                 #expect(sut.observer.containsView(withID: "item.\(item.id)"))
             }
             
-            #expect(sut.observer.viewCountWithViewID(prefix: "item.") == 2)
+            #expect(sut.observer.viewCount(withIDPrefix: "item.") == 2)
             #expect(sut.observer.containsNotView(withID: "item.\(removedId)"))
         }
         

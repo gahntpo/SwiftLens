@@ -15,7 +15,8 @@ extension Button {
 extension NavigationLink {
     public func trackButton(accessibilityIdentifier: String) -> some View {
         self
-            .buttonStyle(TrackingButtonStyle(accessibilityIdentifier: accessibilityIdentifier))
+             .buttonStyle(TrackingButtonStyle(accessibilityIdentifier: accessibilityIdentifier))
+            // buttonstyle not working inside list, form
             // need to apply preferences outside button style because navigationlink does not pass them
             .preferenceTracking(
                 identifier: accessibilityIdentifier,

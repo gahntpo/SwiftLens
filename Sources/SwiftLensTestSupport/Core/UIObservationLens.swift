@@ -12,6 +12,12 @@ public
 final class UIObservationLens: ObservableObject {
     
     @Published public var values: [ViewMetadata] = []
+    
+    func printValues() {
+        print("---- Values ---")
+        values.map { print("- " + $0.description )}
+        print("---------------")
+    }
 
     //MARK: - sync
     
