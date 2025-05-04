@@ -24,14 +24,13 @@ public struct LensList<Content: View>: View {
     /// Initialize with a @ViewBuilder direct content closure
     /// - Parameter content: The view content to display inside the container
     public init(content: Content) {
-           self.content = content
-       }
+        self.content = content
+    }
     
     public var body: some View {
         if isRunningTests {
             ScrollView {
-                //cannot use LazyVStack same problme with prefences
-                VStack(alignment: .leading, spacing: 0) {
+                LazyVStack(alignment: .leading, spacing: 0) {
                     if let content = content {
                         content
                             .frame(minWidth: height)
@@ -39,9 +38,11 @@ public struct LensList<Content: View>: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.yellow)
+                .background(Color(red: 1, green: 1, blue: 0.8)
+                        .cornerRadius(5))
                 .padding(.horizontal)
             }
+            .background(Color(white: 0.93))
         } else {
             List {
                 if let content = content {

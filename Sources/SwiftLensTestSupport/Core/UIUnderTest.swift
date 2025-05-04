@@ -46,8 +46,9 @@ public struct UIUnderTest {
                 expectations.values = metas
             }
         
-        /*
+        
         let hostingController = UIHostingController(rootView: rootView)
+        self.hostingController = hostingController
         
         // Add as child of root view controller
         let rootVC = window.rootViewController!
@@ -69,21 +70,19 @@ public struct UIUnderTest {
         hostingController.didMove(toParent: rootVC)
         window.layoutIfNeeded()
         
-         */
-      
+        /*
+         
+       // 0.346sec
          let hostingController = UIHostingController(rootView: rootView)
          self.hostingController = hostingController
          
          // Create a navigation controller and set it as the window's root
          let navController = UINavigationController(rootViewController: hostingController)
          window.rootViewController = navController
-         
-         // Force layout
+
+        // Force layout
          window.layoutIfNeeded()
-         
-         // Give the SwiftUI view a chance to update its state
-        // RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.1))
-        
+         */
     }
     
     //MARK: - interactions
