@@ -150,4 +150,57 @@ struct PresentationViewTests {
             #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
         }
     }
+    
+    //MARK: - fullScreenCover
+    
+    @Suite("Test Open And Close Sheets with Item Toggle")
+    struct DemoFullScreenCoverTests {
+        
+        @MainActor
+        @Test("fullScreenCover with BooleanBinding - open and close")
+        func fullScreenCoverView_when_ShowPresentationButton_then_open_fullScreenCover() async throws {
+            // —— SYSTEM SETUP ——
+            let sut = UIUnderTest { sut in
+                DemoFullScreenCoverView()
+            }
+            
+            try await sut.observer.waitForViewVisible(withID: "ShowPresentationButton")
+            
+            // —— SHOW fullScreenCover ——
+            sut.simulator.buttonTap(withID: "ShowPresentationButton")
+            
+           try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
+            
+            // —— ACTION: close the sheet ——
+            sut.simulator.buttonTap(withID: "CloseSheetButton")
+            
+            // —— ASSERT: sheet’s button is no longer in the hierarchy ——
+            try await sut.observer.waitForViewHidden(withID: "FavoriteButton")
+            #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
+        }
+        
+        @MainActor
+        @Test("fullScreenCover with ItemBinding - open and close")
+        func fullScreenCoverView_item_when_ShowPresentationButton_then_open_fullScreenCover() async throws {
+            // —— SYSTEM SETUP ——
+            let sut = UIUnderTest { sut in
+                DemoFullScreenCoverItemView()
+            }
+            
+            try await sut.observer.waitForViewVisible(withID: "ShowPresentationButton")
+            
+            // —— SHOW fullScreenCover ——
+            sut.simulator.buttonTap(withID: "ShowPresentationButton")
+            
+           try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
+            
+            // —— ACTION: close the sheet ——
+            sut.simulator.buttonTap(withID: "CloseSheetButton")
+            
+            // —— ASSERT: sheet’s button is no longer in the hierarchy ——
+            try await sut.observer.waitForViewHidden(withID: "FavoriteButton")
+            #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
+        }
+    }
+    
 }
