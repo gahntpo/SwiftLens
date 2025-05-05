@@ -203,11 +203,12 @@ struct ControlViewTests {
         }
     }
     
+    //MARK: - TextField
     @Suite("Test DemoTextFieldView Initial Content")
     struct DemoTextFieldViewTests {
         @MainActor
         @Test("Initial state with empty text")
-        func demoButtonView_initial_items_visible() async throws {
+        func demoTextFieldView_initial_items_visible() async throws {
             // ---- SYSTEM ----
             let vm = DefaultTextViewModel()
             let sut = UIUnderTest { sut in
@@ -225,7 +226,7 @@ struct ControlViewTests {
         
         @MainActor
         @Test("Change text field´s text")
-        func demoButtonView_when_textfield_change_viewmodel_update() async throws {
+        func demoTextFieldView_when_textfield_change_viewmodel_update() async throws {
             // ---- SYSTEM ----
             let vm = DefaultTextViewModel()
             let sut = UIUnderTest { sut in
@@ -248,7 +249,7 @@ struct ControlViewTests {
         
         @MainActor
         @Test("Press Enter trigger view model func")
-        func demoButtonView_when_textfield_enter_then_viewmodel_func_called() async throws {
+        func demoTextFieldView_when_textfield_enter_then_viewmodel_func_called() async throws {
             // ---- SYSTEM ----
             let vm = MockTextViewModel()
             let sut = UIUnderTest { sut in
@@ -272,6 +273,51 @@ struct ControlViewTests {
             // ---- THEN ----
             // #expect(vm.didCallAction, "Submit action not called")
 
+        }
+    }
+    
+    @Suite("Test DemoSearchableView Initial Content")
+    struct DemoSearchableTextFieldViewTests {
+        
+        @available(iOS 16.0, *)
+        @MainActor
+        @Test("Initial state with empty text")
+        func demoSearchableView_initial_items_visible() async throws {
+            // ---- SYSTEM ----
+            let vm = SearchViewModel()
+            let sut = UIUnderTest { sut in
+                DemoSearchableView(viewModel: vm)
+            }
+            #expect(vm.searchText == "")
+            
+            // ---- WHEN ----
+            
+            // ---- THEN ----
+           
+            #expect(sut.observer.containsView(withID: "searchtext"))
+            #expect(sut.observer.textFieldText(forViewID: "searchtext") == "")
+        }
+        
+        @available(iOS 16.0, *)
+        @MainActor
+        @Test("Change text field´s text")
+        func demoSearchableView_when_textfield_change_viewmodel_update() async throws {
+            // ---- SYSTEM ----
+            let vm = SearchViewModel()
+            let sut = UIUnderTest { sut in
+                DemoSearchableView(viewModel: vm)
+            }
+            
+            // ---- WHEN ----
+            let newValue = "first"
+            sut.simulator.textField(withID: "searchtext", to: newValue)
+            
+            // ---- THEN ----
+            #expect(vm.searchText == newValue)
+            
+            //visible search result: only one item in list:
+            try await sut.observer.waitForViewCount(withViewIDPrefix: "item.",
+                                                    expected: 1)
         }
     }
 }

@@ -22,6 +22,8 @@ extension NavigationLink {
                 identifier: accessibilityIdentifier,
                 viewName: String(describing: Self.self)
             )
+            .accessibilityIdentifier(accessibilityIdentifier)
+            // cannot trigger link if inside list/navigationstack
     }
 }
 
