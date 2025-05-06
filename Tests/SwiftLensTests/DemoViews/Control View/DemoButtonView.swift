@@ -60,15 +60,13 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
              LensList {
                  if viewModel.items.isEmpty {
                      EmptyItemView()
-                         .preferenceTracking(identifier: "demo_items_empty_placeholder",
-                                             viewName: String(describing: Self.self))
+                         .lensTracked(id: "demo_items_empty_placeholder")
                  } else {
                      ForEach(viewModel.items) { item in
                          Text(item.name)
                              .padding()
                              .background(Capsule().fill(Color.yellow))
-                             .preferenceTracking(identifier: "item.\(item.id)",
-                                                 viewName: String(describing: Self.self))
+                             .lensTracked(id:"item.\(item.id)")
                      }
                  }
              }
@@ -83,12 +81,10 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
              .disabled(viewModel.items.isEmpty)
              
          }
-         .transformPreferenceTracking(identifier: "demo.list",
-                                      viewName: "DemoButtonView")
+         .lensGroup(id: "demo.list")
          
          // This will overwrite the child preference keys:
-         //.preferenceTracking(identifier: "demo_listr",
-         //                    viewName: String(describing: Self.self))
+         //.lensTracked(id: "demo_listr")
      }
 }
 

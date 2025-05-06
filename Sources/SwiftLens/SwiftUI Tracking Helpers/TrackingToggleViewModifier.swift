@@ -30,15 +30,14 @@ public struct TrackingToggleViewModifier: ViewModifier {
     
     public func body(content: Content) -> some View {
         content
-            .preferenceTracking(identifier: accessibilityIdentifier,
-                                viewName: String(describing: Self.self),
-                                info: ["value" : value,
-                                       "isEnabled" : isEnabled])
+            .lensTracked(id: accessibilityIdentifier,
+                         info: ["value" : value,
+                                "isEnabled" : isEnabled])
             .onChange(of: value) {newValue in
                 sendToggleNotification(value: newValue)
             }
             .onReceive(notificationCenter.publisher(for: .simulateToggleChange)) { notif in
-             receivedToggleNotification(notif: notif)
+                receivedToggleNotification(notif: notif)
             }
             .accessibilityIdentifier(accessibilityIdentifier)
     }

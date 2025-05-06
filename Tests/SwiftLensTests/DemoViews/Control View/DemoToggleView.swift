@@ -26,8 +26,7 @@ struct DemoToggleView: View {
             
             if vm.isTrue {
                 Text("You can toggle this on and off")
-                    .preferenceTracking(identifier: "text.toggled.visible",
-                              viewName: String(describing: Self.self))
+                    .lensTracked(id: "text.toggled.visible")
             }
             
         }

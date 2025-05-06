@@ -50,8 +50,7 @@ struct DemoListView: View {
         .task {
             await fetcher.loadCategories()
         }
-        .transformPreferenceTracking(identifier: "category.list.view.\(fetcher.state.description)",
-                                     viewName: String(describing: Self.self))
+        .lensGroup(id: "category.list.view.\(fetcher.state.description)")
     }
     
     @ViewBuilder
@@ -152,8 +151,7 @@ struct CategoryRow: View {
                 .trackButton(accessibilityIdentifier: "link.category.\(category.id)")
             case .lable:
                 Label(category.title, systemImage: category.icon)
-                    .preferenceTracking(identifier: "link.category.\(category.id)",
-                                        viewName: "CategoryRow")
+                    .lensTracked(id: "link.category.\(category.id)")
         }
 
         

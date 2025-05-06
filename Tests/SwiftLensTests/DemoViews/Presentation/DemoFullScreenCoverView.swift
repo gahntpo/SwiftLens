@@ -20,7 +20,7 @@ struct DemoFullScreenCoverView: View {
             .trackButton(accessibilityIdentifier: "ShowPresentationButton")
             
             Text("Demo View")
-                .preferenceTracking(identifier: "Demo.View.Text", viewName: "DemoSheetView")
+                .lensTracked(id: "Demo.View.Text")
         }
         .trackingFullScreenCover(isPresented: $fullScreenCoverIsShown, content: {
             DemoSheetContentView(isFavorite: $isFavorite)
@@ -41,7 +41,7 @@ struct DemoFullScreenCoverItemView: View {
             .trackButton(accessibilityIdentifier: "ShowPresentationButton")
             
             Text("Demo View")
-                .preferenceTracking(identifier: "Demo.View.Text", viewName: "DemoSheetView")
+                .lensTracked(id: "Demo.View.Text")
         }
         .trackingFullScreenCover(item: $selectedItem, content: { _ in
             DemoSheetContentView(isFavorite: $isFavorite)

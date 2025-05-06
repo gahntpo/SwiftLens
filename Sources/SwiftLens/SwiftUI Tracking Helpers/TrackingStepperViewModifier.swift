@@ -32,9 +32,8 @@ public struct TrackingStepperViewModifier<V>: ViewModifier where V: Strideable &
 
     public func body(content: Content) -> some View {
         content
-            .preferenceTracking(
-                identifier: accessibilityIdentifier,
-                viewName: String(describing: Self.self),
+            .lensTracked(
+                id: accessibilityIdentifier,
                 info: ["value": value,
                        "isEnabled" : isEnabled]
             )

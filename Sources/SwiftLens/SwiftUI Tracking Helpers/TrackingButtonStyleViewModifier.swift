@@ -18,9 +18,8 @@ extension NavigationLink {
              .buttonStyle(TrackingButtonStyle(accessibilityIdentifier: accessibilityIdentifier))
             // buttonstyle not working inside list, form
             // need to apply preferences outside button style because navigationlink does not pass them
-            .preferenceTracking(
-                identifier: accessibilityIdentifier,
-                viewName: String(describing: Self.self)
+            .lensTracked(
+                id: accessibilityIdentifier
             )
             .accessibilityIdentifier(accessibilityIdentifier)
             // cannot trigger link if inside list/navigationstack
@@ -43,9 +42,8 @@ public struct TrackingButtonStyle: PrimitiveButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
       Button(configuration)
-            .preferenceTracking(
-                identifier: accessibilityIdentifier,
-                viewName: String(describing: Self.self),
+            .lensTracked(
+                id: accessibilityIdentifier,
                 info: ["isEnabled" : isEnabled]
             )
       //TODO: only add notification if custom flag is set

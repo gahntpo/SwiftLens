@@ -1,5 +1,5 @@
 //
-//  ViewMetadata.swift
+//  LensCapture.swift
 //  UserInteractionSimulationProject
 //
 //  Created by Karin Prater on 23/04/2025.
@@ -8,21 +8,18 @@
 import SwiftUI
 
 
-public struct ViewMetadata: Equatable {
+public struct LensCapture: Equatable {
     
-    public let viewName: String
     public let viewType: String
     public let identifier: String
     public let info: [String: AnyHashable]
     
-    public var children: [ViewMetadata] = [] // use transformPreferences
+    public var children: [LensCapture] = [] // use transformPreferences
     
-    public init(viewName: String,
-         viewType: String,
+    public init(viewType: String,
          identifier: String,
          info: [String : AnyHashable] = [:],
-         children: [ViewMetadata] = []) {
-        self.viewName = viewName
+         children: [LensCapture] = []) {
         self.viewType = viewType
         self.identifier = identifier
         self.info = info
@@ -31,28 +28,17 @@ public struct ViewMetadata: Equatable {
     
 }
 
-extension ViewMetadata: CustomStringConvertible {
+extension LensCapture: CustomStringConvertible {
     public var description: String {
-        // single‐line, concise:
-        
         """
-         \(viewName) { id: “\(identifier)”\(info.isEmpty ? "" : ", value: \(info)")\(children.isEmpty ? "" : ", children: \(children.map({ $0.identifier}))")}
+         \(viewType) { id: “\(identifier)”\(info.isEmpty ? "" : ", value: \(info)")\(children.isEmpty ? "" : ", children: \(children.map({ $0.identifier}))")}
          """
-        
-        // — or, for a multi‐line style, swap the above for this:
-        /*
-         """
-         \(viewName).\(viewType)
-         • id:        \(identifier)
-         • value:     \(value)
-         """
-         */
     }
 }
 
-extension Array where Element == ViewMetadata {
+extension Array where Element == LensCapture {
     
-    public func findView(withID id: String) -> ViewMetadata? {
+    public func findView(withID id: String) -> LensCapture? {
          for meta in self {
              if meta.identifier == id {
                  return meta
@@ -76,15 +62,15 @@ extension Array where Element == ViewMetadata {
         findView(withID: id)?.info[key]
     }
     
-    public func flattened() -> [ViewMetadata] {
+    public func flattened() -> [LensCapture] {
         flatMap { [$0] + $0.children.flattened() }
     }
 }
 
-public struct ViewMetadataKey: PreferenceKey {
-    public static var defaultValue: [ViewMetadata] = []
+public struct LensCaptureKey: PreferenceKey {
+    public static var defaultValue: [LensCapture] = []
     
-    public static func reduce(value: inout [ViewMetadata], nextValue: () -> [ViewMetadata]) {
+    public static func reduce(value: inout [LensCapture], nextValue: () -> [LensCapture]) {
         value.append(contentsOf: nextValue())
     }
 }

@@ -32,8 +32,8 @@ extension View {
 }
 
 /// A view modifier that presents a fullScreenCover but also captures any
-/// ViewMetadata emitted by the sheet’s content and re‑publishes it
-/// on the parent view’s ViewMetadataKey.
+/// LensCapture emitted by the sheet’s content and re‑publishes it
+/// on the parent view’s LensCaptureKey.
 ///
 struct TrackingFullScreenCoverIsPresentedModifier<FullScreenCoverContent: View>: ViewModifier {
     
@@ -42,19 +42,19 @@ struct TrackingFullScreenCoverIsPresentedModifier<FullScreenCoverContent: View>:
     let fullScreenCoverContent: () -> FullScreenCoverContent
 
     // Holds the latest preferences coming out of the sheet
-    @State private var liftedPreferences: [ViewMetadata] = []
+    @State private var liftedPreferences: [LensCapture] = []
     
     func body(content: Content) -> some View {
         content
            .background {
                 Color.clear
-                    .preference(key: ViewMetadataKey.self, value: liftedPreferences)
+                    .preference(key: LensCaptureKey.self, value: liftedPreferences)
             }
             .fullScreenCover(isPresented: $isPresented,
                              onDismiss: onDismiss,
                              content: {
                 fullScreenCoverContent()
-                    .onPreferenceChange(ViewMetadataKey.self) { liftedPreferences = $0 }
+                    .onPreferenceChange(LensCaptureKey.self) { liftedPreferences = $0 }
             })
             .onChange(of: isPresented) { newValue in
                  guard newValue == false else { return }
@@ -70,7 +70,7 @@ private struct TrackingFullScreenCoverItemModifier<Item: Identifiable & Equatabl
     let onDismiss: (() -> Void)?
     let fullScreenCoverContent: (Item) -> FullScreenCoverContent
 
-    @State private var liftedPreferences: [ViewMetadata] = []
+    @State private var liftedPreferences: [LensCapture] = []
 
     @ViewBuilder
     func body(content: Content) -> some View {
@@ -78,13 +78,13 @@ private struct TrackingFullScreenCoverItemModifier<Item: Identifiable & Equatabl
            // Re‑emit the sheet’s prefs onto the parent’s preference tree
             .background {
                 Color.clear
-                    .preference(key: ViewMetadataKey.self, value: liftedPreferences)
+                    .preference(key: LensCaptureKey.self, value: liftedPreferences)
             }
             .fullScreenCover(item: $item,
                              onDismiss: onDismiss,
                              content: { item in
                 fullScreenCoverContent(item)
-                    .onPreferenceChange(ViewMetadataKey.self) { liftedPreferences = $0 }
+                    .onPreferenceChange(LensCaptureKey.self) { liftedPreferences = $0 }
             })
             .onChange(of: item) { newValue in
                 guard newValue == nil else { return }

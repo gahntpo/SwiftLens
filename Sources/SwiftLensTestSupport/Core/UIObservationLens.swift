@@ -11,7 +11,7 @@ import SwiftLens
 public
 final class UIObservationLens: ObservableObject {
     
-    @Published public var values: [ViewMetadata] = []
+    @Published public var values: [LensCapture] = []
     
    public func printValues() {
         print("---- Values ---")

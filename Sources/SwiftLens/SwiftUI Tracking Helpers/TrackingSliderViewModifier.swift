@@ -45,8 +45,7 @@ public struct TrackingSlider: View {
                 self.internalValue = value
             }
         }
-        .preferenceTracking(identifier: accessibilityIdentifier,
-                            viewName: String(describing: Self.self),
+        .lensTracked(id: accessibilityIdentifier,
                             info: ["value" : value,
                                    "isEnabled" : isEnabled])
         .accessibilityIdentifier(accessibilityIdentifier)

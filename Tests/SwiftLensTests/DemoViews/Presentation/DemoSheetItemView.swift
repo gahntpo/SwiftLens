@@ -20,7 +20,7 @@ struct DemoSheetItemView: View {
             .trackButton(accessibilityIdentifier: "ShowDetailsButton")
             
             Text("Demo View")
-                .preferenceTracking(identifier: "Demo.View.Text", viewName: "DemoSheetView")
+                .lensTracked(id: "Demo.View.Text")
         }
         .trackingSheet(item: $selectedItem, content: { item in
             DemoSheetContentView(isFavorite: $isFavorite)
@@ -44,7 +44,7 @@ struct DemoSheetItemTwoView: View {
             })
             
             Text("Demo View")
-                .preferenceTracking(identifier: "Demo.View.Text", viewName: "DemoSheetView")
+                .lensTracked(id: "Demo.View.Text")
         }
 
     }
@@ -68,7 +68,7 @@ struct DemoSheetItemThreeView: View {
                 })
             
             Text("Demo View")
-                .preferenceTracking(identifier: "Demo.View.Text", viewName: "DemoSheetView")
+                .lensTracked(id: "Demo.View.Text")
         }
     }
 }

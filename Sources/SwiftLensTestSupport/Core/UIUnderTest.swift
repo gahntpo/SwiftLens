@@ -42,7 +42,7 @@ public struct UIUnderTest {
         
         let rootView = content(self)
             .environment(\.notificationCenter, notificationCenter)
-            .onPreferenceChange(ViewMetadataKey.self) { metas in
+            .onPreferenceChange(LensCaptureKey.self) { metas in
                 expectations.values = metas
             }
         

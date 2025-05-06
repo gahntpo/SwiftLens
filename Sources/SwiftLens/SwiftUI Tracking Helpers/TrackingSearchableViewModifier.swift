@@ -31,9 +31,8 @@ struct TrackingSearchableModifier: ViewModifier {
         content
             .background(
                 Color.clear
-                    .preferenceTracking(identifier: accessibilityIdentifier,
-                                        viewName: "lensSearchable",
-                                        info: ["value" : text])
+                    .lensTracked(id: accessibilityIdentifier,
+                                 info: ["value" : text])
             )
             .onReceive(notificationCenter.publisher(for: .simulateTextFieldChange)) { notif in
                 receivedTextFieldChange(notif)

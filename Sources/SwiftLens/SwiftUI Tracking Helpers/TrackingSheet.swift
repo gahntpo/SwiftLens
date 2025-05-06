@@ -5,7 +5,7 @@
 //  Created by Karin Prater on 02/05/2025.
 //
 
-/// Presents a sheet and lifts its ViewMetadata preferences up to the
+/// Presents a sheet and lifts its LensCapture preferences up to the
 /// parent so that UIObservationLens can see them.
 
 /*
@@ -60,8 +60,8 @@ extension View {
 }
 
 /// A view modifier that presents a sheet but also captures any
-/// ViewMetadata emitted by the sheet’s content and re‑publishes it
-/// on the parent view’s ViewMetadataKey.
+/// LensCapture emitted by the sheet’s content and re‑publishes it
+/// on the parent view’s LensCaptureKey.
 ///
 struct TrackingSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
     
@@ -70,22 +70,16 @@ struct TrackingSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
     let sheetContent: () -> SheetContent
 
     // Holds the latest preferences coming out of the sheet
-    @State private var liftedPreferences: [ViewMetadata] = []
+    @State private var liftedPreferences: [LensCapture] = []
     
     
     /*
      Recipe: preferences from content view and sheet are added on same level, one after the other
      Text("six")
-         .preferenceTracking(
-             identifier: "six",
-             viewName: "DemoContainerView"
-         )
+         .lensTracked(id: "six")
          .background {
              Color.clear
-                 .preferenceTracking(
-                     identifier: "six - background",
-                     viewName: "DemoContainerView"
-                 )
+                .lensTracked(id:"six - background")
          }
      */
     
@@ -94,12 +88,12 @@ struct TrackingSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
         content
             .background {
                 Color.clear
-                    .preference(key: ViewMetadataKey.self, value: liftedPreferences)
+                    .preference(key: LensCaptureKey.self, value: liftedPreferences)
             }
             .sheet(isPresented: $isPresented,
                    onDismiss: onDismiss) {
                 sheetContent()
-                    .onPreferenceChange(ViewMetadataKey.self) { liftedPreferences = $0 }
+                    .onPreferenceChange(LensCaptureKey.self) { liftedPreferences = $0 }
             }
             .onChange(of: isPresented) { newValue in
                  guard newValue == false else { return }
@@ -116,7 +110,7 @@ private struct TrackingSheetItemModifier<Item: Identifiable & Equatable, SheetCo
     let onDismiss: (() -> Void)?
     let sheetContent: (Item) -> SheetContent
 
-    @State private var liftedPreferences: [ViewMetadata] = []
+    @State private var liftedPreferences: [LensCapture] = []
 
     @ViewBuilder
     func body(content: Content) -> some View {
@@ -125,13 +119,13 @@ private struct TrackingSheetItemModifier<Item: Identifiable & Equatable, SheetCo
            // Re‑emit the sheet’s prefs onto the parent’s preference tree
             .background {
                 Color.clear
-                    .preference(key: ViewMetadataKey.self, value: liftedPreferences)
+                    .preference(key: LensCaptureKey.self, value: liftedPreferences)
             }
            // The actual sheet
             .sheet(item: $item, onDismiss: onDismiss) { sheetItem in
                 sheetContent(sheetItem)
                 // Listen for changes in the sheet’s preferences
-                    .onPreferenceChange(ViewMetadataKey.self) { liftedPreferences = $0 }
+                    .onPreferenceChange(LensCaptureKey.self) { liftedPreferences = $0 }
             }
            // .onChange(of: item) { oldValue, newValue in
             .onChange(of: item) { newValue in

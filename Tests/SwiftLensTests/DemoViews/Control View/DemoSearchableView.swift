@@ -33,8 +33,7 @@ struct DemoSearchableView: View {
         NavigationStack {
             List(viewModel.result) { item in
                 Text(item.name)
-                    .preferenceTracking(identifier: "item.\(item.id)",
-                                        viewName: String(describing: Self.self))
+                    .lensTracked(id: "item.\(item.id)")
             }
             .trackSearchable(text: $viewModel.searchText,
                             accessibilityIdentifier: "searchtext")

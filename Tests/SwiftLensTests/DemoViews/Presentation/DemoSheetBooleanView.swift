@@ -20,7 +20,7 @@ struct DemoSheetBooleanView: View {
             .trackButton(accessibilityIdentifier: "ShowDetailsButton")
             
             Text("Demo View")
-                .preferenceTracking(identifier: "Demo.View.Text", viewName: "DemoSheetView")
+                .lensTracked(id: "Demo.View.Text")
         }
         .trackingSheet(isPresented: $showDetails) {
             DemoSheetContentView(isFavorite: $isFavorite)
@@ -44,7 +44,7 @@ struct DemoSheetTwoView: View {
             }
             
             Text("Demo View")
-                .preferenceTracking(identifier: "Demo.View.Text", viewName: "DemoSheetView")
+                .lensTracked(id:  "Demo.View.Text")
         }
     }
 }
@@ -67,7 +67,7 @@ struct DemoSheetThreeView: View {
             }
             
             Text("Demo View")
-                .preferenceTracking(identifier: "Demo.View.Text", viewName: "DemoSheetView")
+                .lensTracked(id: "Demo.View.Text")
         }
     }
 }
@@ -81,10 +81,8 @@ struct DemoSheetContentView: View {
         VStack(spacing: 16) {
             // 1) A “Mark Favorite” button that disables itself once tapped
             Text("isFavorite \(isFavorite ? "true" : "false")")
-                .preferenceTracking(
-                    identifier: "FavoriteText",
-                    viewName: "DemoSheetContentView",
-                    info: ["isFavorite": isFavorite]
+                .lensTracked(id: "FavoriteText",
+                             info: ["isFavorite": isFavorite]
                 )
             
             Button("Mark Favorite") {

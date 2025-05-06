@@ -42,9 +42,8 @@ public struct TrackingTextFieldViewModifier: ViewModifier {
     
     public func body(content: Content) -> some View {
         content
-            .preferenceTracking(
-                identifier: accessibilityIdentifier,
-                viewName: String(describing: Self.self),
+            .lensTracked(
+                id: accessibilityIdentifier,
                 info: ["value": text,
                        "focused": isFocused,
                        "isEnabled" : isEnabled]

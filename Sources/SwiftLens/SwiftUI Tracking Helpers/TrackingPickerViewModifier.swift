@@ -43,9 +43,8 @@ public struct TrackingPickerViewModifier<V>: ViewModifier where V: Hashable {
 
     public func body(content: Content) -> some View {
         content
-            .preferenceTracking(
-                identifier: accessibilityIdentifier,
-                viewName: String(describing: Self.self),
+            .lensTracked(
+                id: accessibilityIdentifier,
                 info: ["value": selection,
                        "isEnabled" : isEnabled]
             )

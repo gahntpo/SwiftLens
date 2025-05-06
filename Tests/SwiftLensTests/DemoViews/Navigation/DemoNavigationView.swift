@@ -40,7 +40,6 @@ struct CategoryDetailView: View {
             Text("Detail")
             Text(category.title)
         }
-        .preferenceTracking(identifier: "detail.category.\(category.id)",
-                            viewName: "DetailView")
+        .lensTracked(id: "detail.category.\(category.id)")
     }
 }

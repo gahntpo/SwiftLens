@@ -12,22 +12,13 @@ struct DemoContainerView: View {
     var body: some View {
         VStack {
             Text("First")
-                .preferenceTracking(
-                    identifier: "First",
-                    viewName: "DemoContainerView"
-                )
+                .preferenceTracking(identifier: "First")
             
             VStack {
                 Text("Second")
-                    .preferenceTracking(
-                        identifier: "Second",
-                        viewName: "DemoContainerView"
-                    )
+                    .preferenceTracking(identifier: "Second")
                 Text("Third")
-                    .preferenceTracking(
-                        identifier: "Third",
-                        viewName: "DemoContainerView"
-                    )
+                    .preferenceTracking(identifier: "Third")
             }
         }
     }
@@ -37,24 +28,15 @@ struct DemoContainerNestedView: View {
     var body: some View {
         VStack {
             Text("First")
-                .preferenceTracking(
-                    identifier: "First",
-                    viewName: "DemoContainerView"
-                )
+                .lensTracked(id: "First")
             
             VStack {
                 Text("Second")
-                    .preferenceTracking(
-                        identifier: "Second",
-                        viewName: "DemoContainerView"
-                    )
+                    .lensTracked(id: "Second")
                 Text("Third")
-                    .preferenceTracking(
-                        identifier: "Third",
-                        viewName: "DemoContainerView"
-                    )
+                    .lensTracked(id: "Third")
             }
-            .transformPreferenceTracking(identifier: "container", viewName: "DemoContainerView")
+            .lensTracked(id: "container")
         }
     }
 }
@@ -63,30 +45,18 @@ struct DemoContainerBackgroundView: View {
     var body: some View {
         VStack {
             Text("First")
-                .preferenceTracking(
-                    identifier: "First",
-                    viewName: "DemoContainerView"
-                )
+                .lensTracked(id: "First")
             
             VStack {
                 Text("Second")
-                    .preferenceTracking(
-                        identifier: "Second",
-                        viewName: "DemoContainerView"
-                    )
+                    .lensTracked(id: "Second")
                 Text("Third")
-                    .preferenceTracking(
-                        identifier: "Third",
-                        viewName: "DemoContainerView"
-                    )
+                    .lensTracked(id: "Third")
             }
-            .transformPreferenceTracking(identifier: "container", viewName: "DemoContainerView")
+            .lensGroup(id: "container")
             .background {
                 Color.yellow
-                    .preferenceTracking(
-                        identifier: "Backround.id",
-                        viewName: "DemoContainerView"
-                    )
+                    .lensTracked(id: "Backround.id")
             }
         }
     }
@@ -96,32 +66,20 @@ struct DemoContainerZStackView: View {
     var body: some View {
         VStack {
             Text("First")
-                .preferenceTracking(
-                    identifier: "First",
-                    viewName: "DemoContainerView"
-                )
+                .lensTracked(id: "First")
             
             ZStack {
                 Color.yellow
-                    .preferenceTracking(
-                        identifier: "Yellow",
-                        viewName: "DemoContainerView"
-                    )
+                    .lensTracked(id: "Yellow")
                 
                 VStack {
                     Text("Second")
-                        .preferenceTracking(
-                            identifier: "Second",
-                            viewName: "DemoContainerView"
-                        )
+                        .lensTracked(id: "Second")
                     Text("Third")
-                        .preferenceTracking(
-                            identifier: "Third",
-                            viewName: "DemoContainerView"
-                        )
+                        .lensTracked(id: "Third")
                 }
             }
-            .transformPreferenceTracking(identifier: "ZStack.container", viewName: "DemoContainerView")
+            .lensGroup(id: "ZStack.container")
             
         }
     }
