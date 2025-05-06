@@ -17,7 +17,6 @@ public class LensInteractor {
     
     public func toggle(withID id: String, to value: Bool? = nil) {
         let userInfo = value == nil ?  ["id": id] : ["id": id, "value": value!]
-        
         notificationCenter.post(name: .simulateToggleChange,
                                 object: nil,
                                 userInfo: userInfo)

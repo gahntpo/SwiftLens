@@ -214,10 +214,12 @@ struct DemoButtonViewTests {
             // ---- THEN: Updates to View ----
             try await sut.observer.waitForViewCount(withViewIDPrefix: "item.", expected: 0)
             
+            
             #expect(sut.observer.enabledState(forViewID: "RemoveLastButton") == false)
             #expect(sut.observer.isDisabledState(forViewID: "RemoveLastButton"))
         }
     }
 }
+
 
 

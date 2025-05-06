@@ -13,11 +13,6 @@ public struct LensWorkBench {
     public let observer: LensObserver
     
     public var window: UIWindow
-    
-    public var view: UIView? {
-        window.rootViewController?.view
-    }
-    
     public var hostingController: UIViewController?
     
     public init<Content: View>(

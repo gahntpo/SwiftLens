@@ -23,7 +23,13 @@ extension TextEditor {
     }
 }
 
-//TODO: SecureField
+extension SecureField {
+    public func lensTextEditor(id: String,
+                               text: Binding<String>) -> some View {
+        self.modifier(LensTextFieldViewModifier(accessibilityIdentifier: id,
+                                                text: text))
+    }
+}
 
 public struct LensTextFieldViewModifier: ViewModifier {
     

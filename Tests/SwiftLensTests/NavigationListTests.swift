@@ -148,3 +148,4 @@ struct NavigationListTests {
         try await sut.observer.waitForViewVisible(withID: "detail.category.\(targetCategory.id)")
     }
 }
+

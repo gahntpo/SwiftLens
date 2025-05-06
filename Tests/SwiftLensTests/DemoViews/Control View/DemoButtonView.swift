@@ -66,7 +66,7 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
                          Text(item.name)
                              .padding()
                              .background(Capsule().fill(Color.yellow))
-                             .lensTracked(id:"item.\(item.id)")
+                             .lensTracked(id: "item.\(item.id)")
                      }
                  }
              }
@@ -104,4 +104,5 @@ struct EmptyItemView: View {
     DemoButtonView(viewModel: vm)
 }
 */
+
 

@@ -30,6 +30,6 @@ let package = Package(
                 .unsafeFlags(["-swift-version", "5.5"])
             ]
         )
-    ]                                                  // ← schließe das Array
-)                                                      // ← und den Package-Aufruf
+    ]
+)
 

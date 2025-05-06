@@ -27,7 +27,30 @@ extension DatePicker {
     }
 }
 
-//TODO: ColorPicker, MultiDatePicker, PhotoPicker
+@available(iOS 16.0, *)
+extension MultiDatePicker {
+    public func lensPicker (
+        id: String,
+        selection: Binding<Set<DateComponents>>
+    ) -> some View {
+        self.modifier(LensPickerViewModifier(accessibilityIdentifier: id,
+                                             selection: selection))
+    }
+}
+
+
+extension ColorPicker {
+    public func lensPicker (
+        id: String,
+        selection: Binding<Color>
+    ) -> some View {
+        self.modifier(LensPickerViewModifier(accessibilityIdentifier: id,
+                                             selection: selection))
+    }
+}
+
+
+//TODO: PhotoPicker
 
 public struct LensPickerViewModifier<V>: ViewModifier where V: Hashable {
     

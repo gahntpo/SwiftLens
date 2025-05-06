@@ -32,7 +32,6 @@ struct DemoPickerView: View {
              .lensPicker(id: "demo_picker",
                           selection: $selectedCategory)
             
-              
             DatePicker("date", selection: $selectedDate)
                 .lensPicker(id: "demo_date_picker",
                             selection: $selectedDate)
