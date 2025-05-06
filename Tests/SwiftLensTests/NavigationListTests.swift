@@ -21,7 +21,7 @@ struct NavigationListTests {
         let fetcher = CategoryFetcher(service: service)
         fetcher.categories = Category.allCases
         
-        let sut = UIUnderTest { sut in
+        let sut = LensWorkBench { sut in
             DemoListView(fetcher: fetcher,
                          containerStyle: .list,
                          rowContentStyle: .navigationlink)
@@ -49,7 +49,7 @@ struct NavigationListTests {
         let fetcher = CategoryFetcher(service: service)
         fetcher.categories = Category.allCases
         
-        let sut = UIUnderTest { sut in
+        let sut = LensWorkBench { sut in
             DemoNavigationView(fetcher: fetcher,
                                   containerStyle: .list,
                                   rowContentStyle: .navigationlink)
@@ -79,7 +79,7 @@ struct NavigationListTests {
         let fetcher = CategoryFetcher(service: service)
         fetcher.categories = Category.allCases
         
-        let sut = UIUnderTest { sut in
+        let sut = LensWorkBench { sut in
             TabView {
                 DemoNavigationView(fetcher: fetcher,
                                       containerStyle: .list,
@@ -122,7 +122,7 @@ struct NavigationListTests {
         let fetcher = CategoryFetcher(service: service)
         fetcher.categories = Category.allCases
         
-        let sut = UIUnderTest { sut in
+        let sut = LensWorkBench { sut in
             DemoNavigationView(fetcher: fetcher,
                                containerStyle: .scrollview,  // ❌ does not work for: list, form
                                rowContentStyle: .navigationlink)
@@ -142,7 +142,7 @@ struct NavigationListTests {
         // ❌ does not: list, form
         // not able to navigate to detail with button press simulation
         // -> custom button style with onReceive is not working
-        sut.simulator.buttonTap(withID: buttonID)
+        sut.interactor.tapButton(withID: buttonID)
         
         // ---- THEN: detail is shown ----
         try await sut.observer.waitForViewVisible(withID: "detail.category.\(targetCategory.id)")

@@ -1,6 +1,5 @@
 //
-//  UIEventSimulator.swift
-//  UserInteractionSimulationProject
+//  LensInteractor.swift
 //
 //  Created by Karin Prater on 28/04/2025.
 //
@@ -8,7 +7,7 @@
 import Foundation
 import Combine
 
-public class UIEventSimulator {
+public class LensInteractor {
     
     let notificationCenter: NotificationCenter
 
@@ -23,7 +22,7 @@ public class UIEventSimulator {
                                            "value": value])
     }
 
-    public func buttonTap(withID id: String) {
+    public func tapButton(withID id: String) {
         notificationCenter.post(name: .simulateButtonTap,
                                 object: nil,
                                 userInfo: ["id": id])

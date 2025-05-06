@@ -19,7 +19,7 @@ struct DemoButtonViewTests {
         func demoButtonView_initial_items_visible() async throws {
             // ---- SYSTEM ----
             let vm = DefaultViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoButtonView(viewModel: vm)
             }
             
@@ -39,7 +39,7 @@ struct DemoButtonViewTests {
         func demoButtonView_when_app_launches_then_button_is_visible_and_enabled() async throws {
             // ---- SYSTEM ----
             let vm = DefaultViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoButtonView(viewModel: vm)
             }
             
@@ -58,7 +58,7 @@ struct DemoButtonViewTests {
         func demoButtonView_when_no_items_then_empty_state_view_visible() async throws {
             // ---- SYSTEM ----
             let vm = DefaultViewModel()
-            let sut = UIUnderTest { _ in
+            let sut = LensWorkBench { _ in
                 DemoButtonView(viewModel: vm)
             }
             
@@ -76,7 +76,7 @@ struct DemoButtonViewTests {
         func demoButtonView_when_no_items_then_button_disabled() async throws {
             // ---- SYSTEM ----
             let vm = DefaultViewModel()
-            let sut = UIUnderTest { _ in
+            let sut = LensWorkBench { _ in
                 DemoButtonView(viewModel: vm)
             }
             
@@ -100,12 +100,12 @@ struct DemoButtonViewTests {
         func demoButtonView_when_button_pressed_then_viewmodel_triggered() async throws {
             // ---- SYSTEM ----
             let vm = MockViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoButtonView(viewModel: vm)
             }
             
             // ---- WHEN ----
-            sut.simulator.buttonTap(withID: "RemoveLastButton")
+            sut.interactor.tapButton(withID: "RemoveLastButton")
             
             // ---- THEN ----
             #expect(vm.didCallAction, "RemoveLastButton action not called")
@@ -150,13 +150,13 @@ struct DemoButtonViewTests {
         func demoButtonView_when_button_pressed_then_item_removed_from_UI() async throws {
             // ---- SYSTEM ----
             let vm = DefaultViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoButtonView(viewModel: vm)
             }
             let removedId = vm.items.last?.id ?? UUID()
             
             // ---- WHEN ----
-            sut.simulator.buttonTap(withID: "RemoveLastButton")
+            sut.interactor.tapButton(withID: "RemoveLastButton")
             
             // ---- THEN: Updates to View ----
             try await sut.observer.waitForViewHidden(withID: "item.\(removedId)")   // only one of this is necessary for waiting
@@ -177,13 +177,13 @@ struct DemoButtonViewTests {
         func demoButtonView_when_button_pressed_multiple_times_then_all_but_one_item_removed() async throws {
             // ---- SYSTEM ----
             let vm = DefaultViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoButtonView(viewModel: vm)
             }
             
             // ---- WHEN ----
-            sut.simulator.buttonTap(withID: "RemoveLastButton")
-            sut.simulator.buttonTap(withID: "RemoveLastButton")
+            sut.interactor.tapButton(withID: "RemoveLastButton")
+            sut.interactor.tapButton(withID: "RemoveLastButton")
             
             // ---- THEN: View Model items update ----
             #expect(vm.items.count == 1)
@@ -199,14 +199,14 @@ struct DemoButtonViewTests {
         func demoButtonView_when_button_pressed_multiple_times_then_all_items_removed() async throws {
             // ---- SYSTEM ----
             let vm = DefaultViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoButtonView(viewModel: vm)
             }
             
             // ---- WHEN ----
-            sut.simulator.buttonTap(withID: "RemoveLastButton")
-            sut.simulator.buttonTap(withID: "RemoveLastButton")
-            sut.simulator.buttonTap(withID: "RemoveLastButton")
+            sut.interactor.tapButton(withID: "RemoveLastButton")
+            sut.interactor.tapButton(withID: "RemoveLastButton")
+            sut.interactor.tapButton(withID: "RemoveLastButton")
             
             // ---- THEN: View Model items update ----
             #expect(vm.items.isEmpty)

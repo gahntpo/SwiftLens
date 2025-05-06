@@ -1,5 +1,4 @@
 //
-//  SwiftUIView.swift
 //  SwiftLens
 //
 //  Created by Karin Prater on 30/04/2025.

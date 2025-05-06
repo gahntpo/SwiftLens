@@ -15,7 +15,7 @@ struct ControlViewTests {
             let vm = ToggleViewModel()
             vm.isTrue = isOn
             
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoToggleView(vm: vm)
             }
             
@@ -34,12 +34,12 @@ struct ControlViewTests {
             // ---- SYSTEM ----
             let vm = ToggleViewModel()
             #expect(!vm.isTrue)
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoToggleView(vm: vm)
             }
             
             // ---- WHEN ----
-            sut.simulator.toggle(withID: "CheckList_toggle", to: true)
+            sut.interactor.toggle(withID: "CheckList_toggle", to: true)
             
             // ---- THEN ----
             #expect(vm.isTrue)
@@ -51,12 +51,12 @@ struct ControlViewTests {
             // ---- SYSTEM ----
             let vm = ToggleViewModel()
             
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoToggleView(vm: vm)
             }
             
             // ---- WHEN ----
-            sut.simulator.toggle(withID: "CheckList_toggle", to: true)
+            sut.interactor.toggle(withID: "CheckList_toggle", to: true)
             
             // ---- THEN ----
             try await sut.observer.waitForValue(forViewID: "CheckList_toggle", equals: true)
@@ -73,7 +73,7 @@ struct ControlViewTests {
         @Test("Initial views state")
         func picker_ui_show_initial_selection() async throws {
             // ---- SYSTEM ----
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoPickerView()
             }
             
@@ -90,12 +90,12 @@ struct ControlViewTests {
         @Test("Press picker to change state", arguments: [FoodCategory.chinese, .indian, .italian, .mexican])
         func picker_change_selection(to newSelection: FoodCategory) async throws {
             // ---- SYSTEM ----
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoPickerView()
             }
             
             // ---- WHEN ----
-            sut.simulator.picker(withID: "demo_picker", to: newSelection)
+            sut.interactor.picker(withID: "demo_picker", to: newSelection)
             
             // ---- THEN ----
             try await sut.observer.waitForValue(forViewID: "demo_picker", equals: newSelection)
@@ -106,13 +106,13 @@ struct ControlViewTests {
         @Test("Press date picker to change state")
         func date_picker_change_selection() async throws {
             // ---- SYSTEM ----
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoPickerView()
             }
             
             // ---- WHEN ----
             let newDate = Date()
-            sut.simulator.picker(withID: "demo_date_picker", to: newDate)
+            sut.interactor.picker(withID: "demo_date_picker", to: newDate)
             
             // ---- THEN ----
             try await sut.observer.waitForValue(forViewID: "demo_date_picker", equals: newDate)
@@ -131,7 +131,7 @@ struct ControlViewTests {
         @Test("Initial views state")
         func slider_ui_shows_initial_selection() async throws {
             // ---- SYSTEM ----
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoSliderView()
             }
             
@@ -146,12 +146,12 @@ struct ControlViewTests {
         @Test("Change slider views state", arguments: [Double(2), Double(400.5), Double(23.005)])
        func slider_change_selection(to newValue: Double) async throws {
             // ---- SYSTEM ----
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoSliderView()
             }
             
             // ---- WHEN ----
-            sut.simulator.slider(withID: "demo-slider", to: newValue)
+            sut.interactor.slider(withID: "demo-slider", to: newValue)
             
             // ---- THEN ----
             try await sut.observer.waitForValue(forViewID: "demo-slider", equals: newValue)
@@ -168,7 +168,7 @@ struct ControlViewTests {
         @Test("Initial views state")
         func stepper_ui_shows_initial_selection() async throws {
             // ---- SYSTEM ----
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoStepperView()
             }
             
@@ -183,12 +183,12 @@ struct ControlViewTests {
         @Test("Change slider views state", arguments: [0.1, 23.4, 100])
          func steper_change_selection(to newValue: CGFloat) async throws {
             // ---- SYSTEM ----
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoStepperView()
             }
             
             // ---- WHEN ----
-            sut.simulator.stepper(withID: "demo_stepper", to: newValue)
+            sut.interactor.stepper(withID: "demo_stepper", to: newValue)
             
             // ---- THEN ----
             try await sut.observer.waitForValue(forViewID: "demo_stepper", equals: newValue)
@@ -205,7 +205,7 @@ struct ControlViewTests {
         func textField_ui_shows_initial_text() async throws {
             // ---- SYSTEM ----
             let vm = DefaultTextViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoTextFieldView(viewModel: vm)
             }
             
@@ -223,12 +223,12 @@ struct ControlViewTests {
         func textfield_change_selection(to newValue: String) async throws {
             // ---- SYSTEM ----
             let vm = DefaultTextViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoTextFieldView(viewModel: vm)
             }
             
             // ---- WHEN ----
-            sut.simulator.textField(withID: "demo_textfield", to: newValue)
+            sut.interactor.textField(withID: "demo_textfield", to: newValue)
             
             // ---- THEN ----
             try await sut.observer.waitForView(withID: "demo_textfield", hasValue: newValue)
@@ -241,13 +241,13 @@ struct ControlViewTests {
         func textfield_change_then_viewmodel_update() async throws {
             // ---- SYSTEM ----
             let vm = DefaultTextViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoTextFieldView(viewModel: vm)
             }
             let newValue = "new text"
             
             // ---- WHEN ----
-            sut.simulator.textField(withID: "demo_textfield", to: newValue)
+            sut.interactor.textField(withID: "demo_textfield", to: newValue)
             
             // ---- THEN ----
             #expect(vm.text == newValue)
@@ -264,21 +264,21 @@ struct ControlViewTests {
         func press_enter_then_viewmodel_func_called() async throws {
             // ---- SYSTEM ----
             let vm = MockTextViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoTextFieldView(viewModel: vm)
             }
             
             // ---- WHEN ----
             let newValue = "new text"
-            sut.simulator.textField(withID: "demo_textfield", to: newValue)
-            sut.simulator.textFieldMakeFocus(withID: "demo_textfield")
+            sut.interactor.textField(withID: "demo_textfield", to: newValue)
+            sut.interactor.textFieldMakeFocus(withID: "demo_textfield")
             
             try await sut.observer.waitForTextFieldFocused(withID: "demo_textfield", isFocused: true)
             
             //Problem: dont know how to programmatically trigger submit
             //Could use ViewInspector with callOnCommit
             let enter = "\n"
-            sut.simulator.textField(withID: "demo_textfield", to: enter)
+            sut.interactor.textField(withID: "demo_textfield", to: enter)
             
            // try await sut.observer.waitForTextFieldFocused(withID: "demo_textfield", isFocused: false)
             
@@ -297,7 +297,7 @@ struct ControlViewTests {
         func searchable_textField_shows_initially_empty_text() async throws {
             // ---- SYSTEM ----
             let vm = SearchViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoSearchableView(viewModel: vm)
             }
             #expect(vm.searchText == "")
@@ -316,12 +316,12 @@ struct ControlViewTests {
         func searchable_textfield_change_selection(to newValue: String) async throws {
             // ---- SYSTEM ----
             let vm = SearchViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoSearchableView(viewModel: vm)
             }
             
             // ---- WHEN ----
-            sut.simulator.textField(withID: "searchtext", to: newValue)
+            sut.interactor.textField(withID: "searchtext", to: newValue)
             
             // ---- THEN ----
             try await sut.observer.waitForView(withID: "searchtext", hasValue: newValue)
@@ -335,12 +335,12 @@ struct ControlViewTests {
                                                                  toResultCount: Int) async throws {
             // ---- SYSTEM ----
             let vm = SearchViewModel()
-            let sut = UIUnderTest { sut in
+            let sut = LensWorkBench { sut in
                 DemoSearchableView(viewModel: vm)
             }
             
             // ---- WHEN ----
-            sut.simulator.textField(withID: "searchtext", to: newValue)
+            sut.interactor.textField(withID: "searchtext", to: newValue)
             
             // ---- THEN ----
             #expect(vm.searchText == newValue)

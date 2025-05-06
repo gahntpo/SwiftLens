@@ -16,7 +16,7 @@ struct ContainerViewTests {
     @Test
     func vstack_with_multiple_children_has_multiple_observer_values() async throws {
         // —— SYSTEM SETUP ——
-        let sut = UIUnderTest { sut in
+        let sut = LensWorkBench { sut in
             DemoContainerView()
         }
         
@@ -30,7 +30,7 @@ struct ContainerViewTests {
     @Test
     func nested_vstack_with_children_has_observer_values_representing_nesting() async throws {
         // —— SYSTEM SETUP ——
-        let sut = UIUnderTest { sut in
+        let sut = LensWorkBench { sut in
             DemoContainerNestedView()
         }
         
@@ -51,7 +51,7 @@ struct ContainerViewTests {
     @Test
     func vstack_with_background_has_multiple_observer_values_in_parallel() async throws {
         // —— SYSTEM SETUP ——
-        let sut = UIUnderTest { sut in
+        let sut = LensWorkBench { sut in
             DemoContainerBackgroundView()
         }
         
@@ -71,7 +71,7 @@ struct ContainerViewTests {
     @Test
     func zstack_with_multiple_subviews_has_multiple_observer_values_in_parallel() async throws {
         // —— SYSTEM SETUP ——
-        let sut = UIUnderTest { sut in
+        let sut = LensWorkBench { sut in
             DemoContainerZStackView()
         }
        // sut.observer.printValues()

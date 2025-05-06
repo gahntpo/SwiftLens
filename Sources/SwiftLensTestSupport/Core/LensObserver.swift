@@ -1,6 +1,5 @@
 //
-//  UIExpectations.swift
-//  UserInteractionSimulationProjectTests
+//  LensObserver.swift
 //
 //  Created by Karin Prater on 28/04/2025.
 //
@@ -9,14 +8,14 @@ import Foundation
 import SwiftLens
 
 public
-final class UIObservationLens: ObservableObject {
+final class LensObserver: ObservableObject {
     
     @Published public var values: [LensCapture] = []
     
    public func printValues() {
-        print("---- Values ---")
-        values.map { print("- " + $0.description )}
-        print("---------------")
+       print("---- Values ---")
+       _ = values.map { print("- " + $0.description )}
+       print("---------------")
     }
 
     //MARK: - sync

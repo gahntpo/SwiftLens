@@ -1,6 +1,5 @@
 //
-//  UIUnderTest.swift
-//  UserInteractionSimulationProject
+//  LensWorkBench.swift
 //
 //  Created by Karin Prater on 28/04/2025.
 //
@@ -8,10 +7,10 @@ import SwiftUI
 import SwiftLens
 
 @MainActor
-public struct UIUnderTest {
+public struct LensWorkBench {
     
-    public let simulator: UIEventSimulator
-    public let observer: UIObservationLens
+    public let interactor: LensInteractor
+    public let observer: LensObserver
     
     public var window: UIWindow
     
@@ -22,12 +21,12 @@ public struct UIUnderTest {
     public var hostingController: UIViewController?
     
     public init<Content: View>(
-        @ViewBuilder content: (_ sut: UIUnderTest) -> Content
+        @ViewBuilder content: (_ sut: LensWorkBench) -> Content
     ) {
-        let expectations = UIObservationLens()
+        let expectations = LensObserver()
         let notificationCenter = NotificationCenter()
         
-        self.simulator = UIEventSimulator(notificationCenter: notificationCenter)
+        self.interactor = LensInteractor(notificationCenter: notificationCenter)
         self.observer = expectations
         
         self.window = {
@@ -88,6 +87,6 @@ public struct UIUnderTest {
     //MARK: - interactions
     func waitForAndTap(_ id: String) async throws {
         try await self.observer.waitForViewVisible(withID: id)
-        self.simulator.buttonTap(withID: id)
+        self.interactor.tapButton(withID: id)
     }
 }

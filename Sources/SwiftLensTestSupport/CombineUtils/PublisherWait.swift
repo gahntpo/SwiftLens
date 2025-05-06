@@ -1,6 +1,4 @@
 //
-//  TestTimeoutError.swift
-//  UserInteractionSimulationProject
 //
 //  Created by Karin Prater on 23/04/2025.
 //
