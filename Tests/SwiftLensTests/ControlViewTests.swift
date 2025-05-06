@@ -30,6 +30,23 @@ struct ControlViewTests {
         
         @MainActor
         @Test("Press toggle update ViewModel state")
+        func toggleView_toggle() async throws {
+            // ---- SYSTEM ----
+            let vm = ToggleViewModel()
+            let intialValue = vm.isTrue
+            let sut = LensWorkBench { sut in
+                DemoToggleView(vm: vm)
+            }
+            
+            // ---- WHEN ----
+            sut.interactor.toggle(withID: "CheckList_toggle")
+            
+            // ---- THEN ----
+            #expect(vm.isTrue != intialValue)
+        }
+        
+        @MainActor
+        @Test("Press toggle update ViewModel state")
         func toggleView_when_toggle_simulated_then_ViewModel_state_is_updated() async throws {
             // ---- SYSTEM ----
             let vm = ToggleViewModel()
@@ -232,7 +249,7 @@ struct ControlViewTests {
             
             // ---- THEN ----
             try await sut.observer.waitForView(withID: "demo_textfield", hasValue: newValue)
-            #expect(sut.observer.textFieldText(forViewID: "demo_textfield") == newValue)
+            #expect(sut.observer.textFieldText(forViewID: "demo_textfield", equalTo: newValue))
         }
         
         

@@ -80,6 +80,10 @@ final class LensObserver: ObservableObject {
         values.value(forViewID: id, key: "value") as? String
     }
     
+    public func textFieldText(forViewID id: String, equalTo text: String) -> Bool {
+        textFieldText(forViewID: id) == text
+    }
+    
     //MARK: - await
     
     public func waitForViewVisible(withID id: String,

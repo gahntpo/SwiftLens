@@ -39,7 +39,7 @@ struct DemoTextFieldView<VM: TestableTextViewModelProtocol>: View  {
         VStack {
             TextField("Enter text", text: $viewModel.text)
                 .lensTextField(id: "demo_textfield",
-                                text: $viewModel.text)
+                               text: $viewModel.text)
                 .textFieldStyle(.roundedBorder)
               //  .onSubmit {
               //      print("submit outside still works")

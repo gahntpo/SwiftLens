@@ -50,10 +50,13 @@ public struct LensToggleViewModifier: ViewModifier {
     }
     
     func receivedToggleNotification(notif: NotificationCenter.Publisher.Output) {
-        if let notifId = notif.userInfo?["id"] as? String,
-           let newVal = notif.userInfo?["value"] as? Bool,
-           notifId == accessibilityIdentifier {
+        guard let notifId = notif.userInfo?["id"] as? String,
+              notifId == accessibilityIdentifier else { return }
+            
+        if let newVal = notif.userInfo?["value"] as? Bool {
             value = newVal
+        } else {
+            value.toggle()
         }
     }
 }

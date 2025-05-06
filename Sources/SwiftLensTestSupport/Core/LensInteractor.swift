@@ -15,11 +15,12 @@ public class LensInteractor {
         self.notificationCenter = notificationCenter
     }
     
-    public func toggle(withID id: String, to value: Bool) {
+    public func toggle(withID id: String, to value: Bool? = nil) {
+        let userInfo = value == nil ?  ["id": id] : ["id": id, "value": value!]
+        
         notificationCenter.post(name: .simulateToggleChange,
                                 object: nil,
-                                userInfo: ["id": id,
-                                           "value": value])
+                                userInfo: userInfo)
     }
 
     public func tapButton(withID id: String) {
