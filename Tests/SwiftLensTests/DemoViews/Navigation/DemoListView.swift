@@ -140,7 +140,7 @@ struct CategoryRow: View {
                     Label(category.title, systemImage: category.icon)
                 }
                 
-                .trackButton(accessibilityIdentifier: "link.category.\(category.id)")
+                .lensButton(id: "link.category.\(category.id)")
                
             case .button:
                 Button {
@@ -148,7 +148,7 @@ struct CategoryRow: View {
                 } label: {
                     Label(category.title, systemImage: category.icon)
                 }
-                .trackButton(accessibilityIdentifier: "link.category.\(category.id)")
+                .lensButton(id: "link.category.\(category.id)")
             case .lable:
                 Label(category.title, systemImage: category.icon)
                     .lensTracked(id: "link.category.\(category.id)")

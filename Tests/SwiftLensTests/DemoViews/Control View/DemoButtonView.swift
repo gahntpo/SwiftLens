@@ -76,7 +76,7 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
              Button("Remove Last") {
                  viewModel.removeLast()
              }
-             .trackButton(accessibilityIdentifier: "RemoveLastButton")
+             .lensButton(id: "RemoveLastButton")
              .buttonStyle(.borderedProminent)
              .disabled(viewModel.items.isEmpty)
              

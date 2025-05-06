@@ -10,22 +10,22 @@
 
 /*
  // MARK: isPresented-style
- .liftingSheet(isPresented: $showLogin) {
+ .lensSheet(isPresented: $showLogin) {
      LoginView()
  }
 
  // or with onDismiss:
- .liftingSheet(isPresented: $showLogin, onDismiss: { viewModel.reset() }) {
+ .lensSheet(isPresented: $showLogin, onDismiss: { viewModel.reset() }) {
      LoginView()
  }
 
  // MARK: item-style
- .liftingSheet(item: $selectedUser) { user in
+ .lensSheet(item: $selectedUser) { user in
      UserDetail(user: user)
  }
 
  // or with onDismiss:
- .liftingSheet(item: $selectedUser, onDismiss: clearSelection) { user in
+ .lensSheet(item: $selectedUser, onDismiss: clearSelection) { user in
      UserDetail(user: user)
  }
  */
@@ -34,37 +34,41 @@
 import SwiftUI
 
 extension View {
-   public func trackingSheet<Content: View>(
+    public func lensSheet<Content: View>(
+        id: String,
         isPresented: Binding<Bool>,
         onDismiss: (() -> Void)? = nil,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View {
-        modifier(TrackingSheetIsPresentedModifier(isPresented: isPresented,
-                                        onDismiss: onDismiss,
-                                        sheetContent: content))
+        modifier(
+            LensSheetIsPresentedModifier(accessibilityIdentifier: id,
+                                         isPresented: isPresented,
+                                         onDismiss: onDismiss,
+                                         sheetContent: content))
     }
     
-   public func trackingSheet<Item: Identifiable & Equatable, Content: View>(
-          item: Binding<Item?>,
-          onDismiss: (() -> Void)? = nil,
-          @ViewBuilder content: @escaping (Item) -> Content
-      ) -> some View {
-          modifier(
-              TrackingSheetItemModifier(
-                  item: item,
-                  onDismiss: onDismiss,
-                  sheetContent: content
-              )
-          )
-      }
+    public func lensSheet<Item: Identifiable & Equatable, Content: View>(
+        id: String,
+        item: Binding<Item?>,
+        onDismiss: (() -> Void)? = nil,
+        @ViewBuilder content: @escaping (Item) -> Content
+    ) -> some View {
+        modifier(
+            LensSheetItemModifier(accessibilityIdentifier: id,
+                                  item: item,
+                                  onDismiss: onDismiss,
+                                  sheetContent: content)
+        )
+    }
 }
 
 /// A view modifier that presents a sheet but also captures any
 /// LensCapture emitted by the sheet’s content and re‑publishes it
 /// on the parent view’s LensCaptureKey.
 ///
-struct TrackingSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
+struct LensSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
     
+    public let accessibilityIdentifier: String
     @Binding var isPresented: Bool
     let onDismiss: (() -> Void)?
     let sheetContent: () -> SheetContent
@@ -72,7 +76,11 @@ struct TrackingSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
     // Holds the latest preferences coming out of the sheet
     @State private var liftedPreferences: [LensCapture] = []
     
-    
+    var passedPreferences: [LensCapture] {
+        liftedPreferences.isEmpty ? [] : [LensCapture(viewType: String(describing: Self.self),
+                                                      identifier: accessibilityIdentifier,
+                                                      children: liftedPreferences)]
+    }
     /*
      Recipe: preferences from content view and sheet are added on same level, one after the other
      Text("six")
@@ -88,7 +96,8 @@ struct TrackingSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
         content
             .background {
                 Color.clear
-                    .preference(key: LensCaptureKey.self, value: liftedPreferences)
+                    .preference(key: LensCaptureKey.self,
+                                value: passedPreferences)
             }
             .sheet(isPresented: $isPresented,
                    onDismiss: onDismiss) {
@@ -104,13 +113,20 @@ struct TrackingSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
 }
 
 
-private struct TrackingSheetItemModifier<Item: Identifiable & Equatable, SheetContent: View>: ViewModifier {
+private struct LensSheetItemModifier<Item: Identifiable & Equatable, SheetContent: View>: ViewModifier {
     
+    public let accessibilityIdentifier: String
     @Binding var item: Item?
     let onDismiss: (() -> Void)?
     let sheetContent: (Item) -> SheetContent
 
     @State private var liftedPreferences: [LensCapture] = []
+    
+    var passedPreferences: [LensCapture] {
+        liftedPreferences.isEmpty ? [] : [LensCapture(viewType: String(describing: Self.self),
+                                                      identifier: accessibilityIdentifier,
+                                                      children: liftedPreferences)]
+    }
 
     @ViewBuilder
     func body(content: Content) -> some View {
@@ -119,7 +135,8 @@ private struct TrackingSheetItemModifier<Item: Identifiable & Equatable, SheetCo
            // Re‑emit the sheet’s prefs onto the parent’s preference tree
             .background {
                 Color.clear
-                    .preference(key: LensCaptureKey.self, value: liftedPreferences)
+                    .preference(key: LensCaptureKey.self,
+                                value: passedPreferences)
             }
            // The actual sheet
             .sheet(item: $item, onDismiss: onDismiss) { sheetItem in

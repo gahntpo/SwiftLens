@@ -5,33 +5,36 @@ import Testing
 
 struct PresentationViewTests {
 
-    @Suite("Test Open And Close Sheets with Boolean Toggle")
+    @Suite("Sheets with Boolean Toggle")
     struct DemoSheetBooleanTests {
         @MainActor
-        @Test("Sheet position outside VStack")
-        func sheetDemoView_when_ShowDetailsButton_then_open_sheet() async throws {
-            // —— SYSTEM SETUP ——
+        @Test("Open when sheet position outside VStack")
+        func sheetDemoView_when_button_pressed_then_open_sheet() async throws {
+            // —— SYSTEM ——
             let sut = UIUnderTest { sut in
                 DemoSheetBooleanView()
             }
             
             try await sut.observer.waitForViewVisible(withID: "ShowDetailsButton")
             
-            // —— SHOW SHEET ——
+            // ---- WHEN ----
             sut.simulator.buttonTap(withID: "ShowDetailsButton")
             
+            // ---- THEN  ----
+            try await sut.observer.waitForViewVisible(withID: "sheet.content.group")
             try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
             
-            // —— ACTION: close the sheet ——
-            sut.simulator.buttonTap(withID: "CloseSheetButton")
+            let sheetContent = sut.observer.view(withID: "sheet.content.group")
             
-            // —— ASSERT: sheet’s button is no longer in the hierarchy ——
-            try await sut.observer.waitForViewHidden(withID: "FavoriteButton")
-            #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
+           // sut.observer.printValues()
+            
+            #expect(sheetContent?.children.findView(withID: "FavoriteButton") != nil,
+                    "should see favorite button that is inside the sheet content")
+            
         }
-        
+
         @MainActor
-        @Test("Sheet position at button level")
+        @Test("Open when sheet position at button level")
         func sheetDemoView_Two_when_ShowDetailsButton_then_open_sheet() async throws {
             // —— SYSTEM SETUP ——
             let sut = UIUnderTest { sut in
@@ -40,21 +43,23 @@ struct PresentationViewTests {
             
             try await sut.observer.waitForViewVisible(withID: "ShowDetailsButton")
             
-            // —— SHOW SHEET ——
+            // ---- WHEN ----
             sut.simulator.buttonTap(withID: "ShowDetailsButton")
             
+            // ---- THEN  ----
+            try await sut.observer.waitForViewVisible(withID: "sheet.content.group")
             try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
             
-            // —— ACTION: close the sheet ——
-            sut.simulator.buttonTap(withID: "CloseSheetButton")
+            let sheetContent = sut.observer.view(withID: "sheet.content.group")
             
-            // —— ASSERT: sheet’s button is no longer in the hierarchy ——
-            try await sut.observer.waitForViewHidden(withID: "FavoriteButton")
-            #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
+           // sut.observer.printValues()
+            
+            #expect(sheetContent?.children.findView(withID: "FavoriteButton") != nil,
+                    "should see favorite button that is inside the sheet content")
         }
         
         @MainActor
-        @Test("Sheet position at untracked view")
+        @Test("Open when sheet position at untracked view")
         func sheetDemoView_Three_when_ShowDetailsButton_then_open_sheet() async throws {
             // —— SYSTEM SETUP ——
             let sut = UIUnderTest { sut in
@@ -63,26 +68,53 @@ struct PresentationViewTests {
             
             try await sut.observer.waitForViewVisible(withID: "ShowDetailsButton")
             
-            // —— SHOW SHEET ——
+            // ---- WHEN ----
             sut.simulator.buttonTap(withID: "ShowDetailsButton")
             
+            // ---- THEN  ----
+            try await sut.observer.waitForViewVisible(withID: "sheet.content.group")
             try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
             
-            // —— ACTION: close the sheet ——
+            let sheetContent = sut.observer.view(withID: "sheet.content.group")
+            
+           // sut.observer.printValues()
+            
+            #expect(sheetContent?.children.findView(withID: "FavoriteButton") != nil,
+                    "should see favorite button that is inside the sheet content")
+        }
+        
+        @MainActor
+        @Test("Open and Close sheet")
+        func open_and_close_sheet() async throws {
+            // —— SYSTEM ——
+            let sut = UIUnderTest { sut in
+                DemoSheetBooleanView()
+            }
+            
+            try await sut.observer.waitForViewVisible(withID: "ShowDetailsButton")
+            sut.simulator.buttonTap(withID: "ShowDetailsButton")
+            // wait for sheet open:
+            try await sut.observer.waitForViewVisible(withID: "sheet.content.group")
+            try await sut.observer.waitForViewVisible(withID: "CloseSheetButton")
+            
+            // ---- WHEN ----
             sut.simulator.buttonTap(withID: "CloseSheetButton")
             
-            // —— ASSERT: sheet’s button is no longer in the hierarchy ——
-            try await sut.observer.waitForViewHidden(withID: "FavoriteButton")
-            #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
+            // ---- THEN  ----
+            try await sut.observer.waitForViewHidden(withID:  "sheet.content.group")
+            
+            #expect(sut.observer.containsNotView(withID: "FavoriteText"), "text inside sheet should not be shown")
+            #expect(sut.observer.containsNotView(withID: "CloseSheetButton"), "button inside sheet should not be shown")
+            #expect(sut.observer.containsNotView(withID: "FavoriteButton"),"button inside sheet should not be shown")
         }
     }
     
     //DemoSheetItemView
     
-    @Suite("Test Open And Close Sheets with Item Toggle")
+    @Suite("Sheet with Item Toggle")
     struct DemoSheetItemTests {
         @MainActor
-        @Test("Sheet position outside VStack")
+        @Test("Open when sheet position outside VStack")
         func sheetDemoItemView_when_ShowDetailsButton_then_open_sheet() async throws {
             // —— SYSTEM SETUP ——
             let sut = UIUnderTest { sut in
@@ -91,6 +123,8 @@ struct PresentationViewTests {
             
             try await sut.observer.waitForViewVisible(withID: "ShowDetailsButton")
             
+            sut.observer.printValues()
+            
             // —— SHOW SHEET ——
             sut.simulator.buttonTap(withID: "ShowDetailsButton")
             
@@ -100,12 +134,15 @@ struct PresentationViewTests {
             sut.simulator.buttonTap(withID: "CloseSheetButton")
             
             // —— ASSERT: sheet’s button is no longer in the hierarchy ——
-            try await sut.observer.waitForViewHidden(withID: "FavoriteButton")
+            try await sut.observer.waitForViewHidden(withID: "sheet.content.group")
+            
+            sut.observer.printValues()
+            
             #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
         }
         
         @MainActor
-        @Test("Sheet position at button level")
+        @Test("Open when sheet position at button level")
         func sheetDemoView_Two_when_ShowDetailsButton_then_open_sheet() async throws {
             // —— SYSTEM SETUP ——
             let sut = UIUnderTest { sut in
@@ -128,7 +165,7 @@ struct PresentationViewTests {
         }
         
         @MainActor
-        @Test("Sheet position at untracked view")
+        @Test("Open when sheet position at untracked view")
         func sheetDemoView_Three_when_ShowDetailsButton_then_open_sheet() async throws {
             // —— SYSTEM SETUP ——
             let sut = UIUnderTest { sut in
@@ -149,58 +186,126 @@ struct PresentationViewTests {
             try await sut.observer.waitForViewHidden(withID: "FavoriteButton")
             #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
         }
+        
+        @MainActor
+        @Test("Open and Close sheet")
+        func open_and_close_sheet() async throws {
+            // —— SYSTEM ——
+            let sut = UIUnderTest { sut in
+                DemoSheetItemView()
+            }
+            
+            try await sut.observer.waitForViewVisible(withID: "ShowDetailsButton")
+            sut.simulator.buttonTap(withID: "ShowDetailsButton")
+            // wait for sheet open:
+            try await sut.observer.waitForViewVisible(withID: "sheet.content.group")
+            try await sut.observer.waitForViewVisible(withID: "CloseSheetButton")
+            
+            // ---- WHEN ----
+            sut.simulator.buttonTap(withID: "CloseSheetButton")
+            
+            // ---- THEN  ----
+            try await sut.observer.waitForViewHidden(withID:  "sheet.content.group")
+            
+            #expect(sut.observer.containsNotView(withID: "FavoriteText"), "text inside sheet should not be shown")
+            #expect(sut.observer.containsNotView(withID: "CloseSheetButton"), "button inside sheet should not be shown")
+            #expect(sut.observer.containsNotView(withID: "FavoriteButton"),"button inside sheet should not be shown")
+        }
     }
     
     //MARK: - fullScreenCover
-    
-    @Suite("Test Open And Close Sheets with Item Toggle")
-    struct DemoFullScreenCoverTests {
+    @Suite("FullScreenCover with Boolean Toggle")
+    struct DemoFullScreenCoverBooleanTests {
         
         @MainActor
-        @Test("fullScreenCover with BooleanBinding - open and close")
-        func fullScreenCoverView_when_ShowPresentationButton_then_open_fullScreenCover() async throws {
-            // —— SYSTEM SETUP ——
+        @Test("Open fullScreenCover")
+        func open_fullScreenCover() async throws {
+            // —— SYSTEM  ——
             let sut = UIUnderTest { sut in
                 DemoFullScreenCoverView()
             }
             
             try await sut.observer.waitForViewVisible(withID: "ShowPresentationButton")
             
-            // —— SHOW fullScreenCover ——
+            // ---- WHEN ----
             sut.simulator.buttonTap(withID: "ShowPresentationButton")
             
-           try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
-            
-            // —— ACTION: close the sheet ——
-            sut.simulator.buttonTap(withID: "CloseSheetButton")
-            
-            // —— ASSERT: sheet’s button is no longer in the hierarchy ——
-            try await sut.observer.waitForViewHidden(withID: "FavoriteButton")
-            #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
+            // ---- THEN  ----
+            try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
+            try await sut.observer.waitForViewVisible(withID: "fullscreencover.content.group")
         }
         
         @MainActor
-        @Test("fullScreenCover with ItemBinding - open and close")
-        func fullScreenCoverView_item_when_ShowPresentationButton_then_open_fullScreenCover() async throws {
-            // —— SYSTEM SETUP ——
+        @Test("Open and Close fullScreenCover")
+        func open_and_close_fullScreenCover() async throws {
+            // —— SYSTEM  ——
+            let sut = UIUnderTest { sut in
+                DemoFullScreenCoverView()
+            }
+            
+            try await sut.observer.waitForViewVisible(withID: "ShowPresentationButton")
+            // open sheet:
+            sut.simulator.buttonTap(withID: "ShowPresentationButton")
+            try await sut.observer.waitForViewVisible(withID: "CloseSheetButton")
+            
+            // ---- WHEN ----
+            sut.simulator.buttonTap(withID: "CloseSheetButton")
+            
+            // ---- THEN  ----
+            // wait for sheet to disappear:
+            try await sut.observer.waitForViewHidden(withID: "fullscreencover.content.group")
+            
+            #expect(sut.observer.containsNotView(withID: "FavoriteText"), "text inside sheet should not be shown")
+            #expect(sut.observer.containsNotView(withID: "CloseSheetButton"), "button inside sheet should not be shown")
+            #expect(sut.observer.containsNotView(withID: "FavoriteButton"),"button inside sheet should not be shown")
+        }
+    }
+    
+    
+    @Suite("FullScreenCover with Item Toggle")
+    struct DemoFullScreenCoverItemTests {
+        
+        @MainActor
+        @Test("Open fullScreenCover")
+        func open_fullScreenCover() async throws {
+            // —— SYSTEM  ——
             let sut = UIUnderTest { sut in
                 DemoFullScreenCoverItemView()
             }
             
             try await sut.observer.waitForViewVisible(withID: "ShowPresentationButton")
             
-            // —— SHOW fullScreenCover ——
+            // ---- WHEN ----
             sut.simulator.buttonTap(withID: "ShowPresentationButton")
             
-           try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
+            // ---- THEN  ----
+            try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
+            try await sut.observer.waitForViewVisible(withID: "fullscreencover.content.group")
+        }
+        
+        @MainActor
+        @Test("Open and Close fullScreenCover")
+        func open_and_close_fullScreenCover() async throws {
+            // —— SYSTEM  ——
+            let sut = UIUnderTest { sut in
+                DemoFullScreenCoverItemView()
+            }
             
-            // —— ACTION: close the sheet ——
+            try await sut.observer.waitForViewVisible(withID: "ShowPresentationButton")
+            // open sheet:
+            sut.simulator.buttonTap(withID: "ShowPresentationButton")
+            try await sut.observer.waitForViewVisible(withID: "fullscreencover.content.group")
+            
+            // ---- WHEN ----
             sut.simulator.buttonTap(withID: "CloseSheetButton")
             
-            // —— ASSERT: sheet’s button is no longer in the hierarchy ——
-            try await sut.observer.waitForViewHidden(withID: "FavoriteButton")
-            #expect(sut.observer.values.count == 2, "View should only have 2 views tracked")
+            // ---- THEN  ----
+            // wait for sheet to disappear:
+            try await sut.observer.waitForViewHidden(withID: "fullscreencover.content.group")
+            
+            #expect(sut.observer.containsNotView(withID: "FavoriteText"), "text inside sheet should not be shown")
+            #expect(sut.observer.containsNotView(withID: "CloseSheetButton"), "button inside sheet should not be shown")
+            #expect(sut.observer.containsNotView(withID: "FavoriteButton"),"button inside sheet should not be shown")
         }
     }
-    
 }

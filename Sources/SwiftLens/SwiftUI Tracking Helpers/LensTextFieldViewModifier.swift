@@ -8,24 +8,24 @@
 import SwiftUI
 
 extension TextField {
-    public  func trackTextField(accessibilityIdentifier: String,
-                        text: Binding<String>) -> some View {
-        self.modifier(TrackingTextFieldViewModifier(accessibilityIdentifier: accessibilityIdentifier,
+    public  func lensTextField(id: String,
+                               text: Binding<String>) -> some View {
+        self.modifier(LensTextFieldViewModifier(accessibilityIdentifier: id,
                                                     text: text))
     }
 }
 
 extension TextEditor {
-   public func trackTextEditor(accessibilityIdentifier: String,
-                        text: Binding<String>) -> some View {
-        self.modifier(TrackingTextFieldViewModifier(accessibilityIdentifier: accessibilityIdentifier,
-                                                    text: text))
+    public func lensTextEditor(id: String,
+                               text: Binding<String>) -> some View {
+        self.modifier(LensTextFieldViewModifier(accessibilityIdentifier: id,
+                                                text: text))
     }
 }
 
 //TODO: SecureField
 
-public struct TrackingTextFieldViewModifier: ViewModifier {
+public struct LensTextFieldViewModifier: ViewModifier {
     
     let accessibilityIdentifier: String
     @Binding var text: String

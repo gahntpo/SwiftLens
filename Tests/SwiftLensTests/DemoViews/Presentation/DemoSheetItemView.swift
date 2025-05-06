@@ -17,12 +17,14 @@ struct DemoSheetItemView: View {
             Button("Show Details") {
                 selectedItem = .american
             }
-            .trackButton(accessibilityIdentifier: "ShowDetailsButton")
+            .lensButton(id: "ShowDetailsButton")
             
             Text("Demo View")
                 .lensTracked(id: "Demo.View.Text")
         }
-        .trackingSheet(item: $selectedItem, content: { item in
+        .lensSheet(id: "sheet.content.group",
+                   item: $selectedItem,
+                   content: { item in
             DemoSheetContentView(isFavorite: $isFavorite)
         })
     }
@@ -38,8 +40,10 @@ struct DemoSheetItemTwoView: View {
             Button("Show Details") {
                 selectedItem = .american
             }
-            .trackButton(accessibilityIdentifier: "ShowDetailsButton")
-            .trackingSheet(item: $selectedItem, content: { item in
+            .lensButton(id: "ShowDetailsButton")
+            .lensSheet(id: "sheet.content.group",
+                       item: $selectedItem,
+                       content: { item in
                 DemoSheetContentView(isFavorite: $isFavorite)
             })
             
@@ -60,10 +64,12 @@ struct DemoSheetItemThreeView: View {
             Button("Show Details") {
                 selectedItem = .american
             }
-            .trackButton(accessibilityIdentifier: "ShowDetailsButton")
+            .lensButton(id: "ShowDetailsButton")
             
             Text("Testing Text")
-                .trackingSheet(item: $selectedItem, content: { item in
+                .lensSheet(id: "sheet.content.group",
+                           item: $selectedItem,
+                           content: { item in
                     DemoSheetContentView(isFavorite: $isFavorite)
                 })
             

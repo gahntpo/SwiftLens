@@ -7,21 +7,19 @@
 import SwiftUI
 
 extension Button {
-    public func trackButton(accessibilityIdentifier: String) -> some View {
-        self.buttonStyle(TrackingButtonStyle(accessibilityIdentifier: accessibilityIdentifier))
+    public func lensButton(id: String) -> some View {
+        self.buttonStyle(LensButtonStyle(accessibilityIdentifier: id))
     }
 }
 
 extension NavigationLink {
-    public func trackButton(accessibilityIdentifier: String) -> some View {
+    public func lensButton(id: String) -> some View {
         self
-             .buttonStyle(TrackingButtonStyle(accessibilityIdentifier: accessibilityIdentifier))
+             .buttonStyle(LensButtonStyle(accessibilityIdentifier: id))
             // buttonstyle not working inside list, form
             // need to apply preferences outside button style because navigationlink does not pass them
-            .lensTracked(
-                id: accessibilityIdentifier
-            )
-            .accessibilityIdentifier(accessibilityIdentifier)
+            .lensTracked(id: id)
+            .accessibilityIdentifier(id)
             // cannot trigger link if inside list/navigationstack
     }
 }
@@ -30,7 +28,7 @@ extension NavigationLink {
 
 // Compatible with custom button styling
 
-public struct TrackingButtonStyle: PrimitiveButtonStyle {
+public struct LensButtonStyle: PrimitiveButtonStyle {
 
     public let accessibilityIdentifier: String
     @Environment(\.notificationCenter) var notificationCenter

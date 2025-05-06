@@ -38,7 +38,7 @@ struct DemoTextFieldView<VM: TestableTextViewModelProtocol>: View  {
     var body: some View {
         VStack {
             TextField("Enter text", text: $viewModel.text)
-                .trackTextField(accessibilityIdentifier: "demo_textfield",
+                .lensTextField(id: "demo_textfield",
                                 text: $viewModel.text)
                 .textFieldStyle(.roundedBorder)
               //  .onSubmit {

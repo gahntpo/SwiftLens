@@ -16,8 +16,8 @@ struct DemoSliderView: View {
         VStack {
             Text("Slider \(value.formatted())")
          
-            TrackingSlider(value: $value,
-                        accessibilityIdentifier: "demo-slider")
+            LensSlider(id: "demo-slider",
+                       value: $value)
         }
     }
 }

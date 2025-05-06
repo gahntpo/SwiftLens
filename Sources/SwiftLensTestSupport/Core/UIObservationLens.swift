@@ -21,6 +21,10 @@ final class UIObservationLens: ObservableObject {
 
     //MARK: - sync
     
+    public func view(withID id: String) -> LensCapture? {
+        values.findView(withID: id)
+    }
+    
     public func containsView(withID id: String) -> Bool {
         values.containsView(withID: id)
     }

@@ -14,7 +14,7 @@
 
 import SwiftUI
 
-public struct TrackingSlider: View {
+public struct LensSlider: View {
     
     @Binding var value: Double
     @State private var internalValue: Double
@@ -23,11 +23,11 @@ public struct TrackingSlider: View {
     @Environment(\.notificationCenter) var notificationCenter
     @Environment(\.isEnabled) var isEnabled
     
-    public init(value: Binding<Double>,
-                accessibilityIdentifier: String) {
+    public init(id: String,
+                value: Binding<Double>) {
         self._value = value
         self._internalValue = State(initialValue: value.wrappedValue)
-        self.accessibilityIdentifier = accessibilityIdentifier
+        self.accessibilityIdentifier = id
     }
     
     public var body: some View {
@@ -46,17 +46,15 @@ public struct TrackingSlider: View {
             }
         }
         .lensTracked(id: accessibilityIdentifier,
-                            info: ["value" : value,
-                                   "isEnabled" : isEnabled])
+                     info: ["value" : value,
+                            "isEnabled" : isEnabled])
         .accessibilityIdentifier(accessibilityIdentifier)
     }
     
     private func sendSliderNotification(value: Double) {
         notificationCenter.post(name: .sliderWasChanged,
                                 object: nil,
-                                userInfo: [
-                                    "id": accessibilityIdentifier,
-                                    "value": value
-                                ])
+                                userInfo: ["id": accessibilityIdentifier,
+                                           "value": value])
     }
 }

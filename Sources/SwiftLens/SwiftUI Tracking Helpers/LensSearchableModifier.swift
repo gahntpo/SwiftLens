@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  LensSearchableModifier.swift
 //  SwiftLens
 //
 //  Created by Karin Prater on 05/05/2025.
@@ -8,19 +8,19 @@
 import SwiftUI
 
 extension View {
-    public func trackSearchable(text: Binding<String>,
-                               accessibilityIdentifier: String,
+    public func lensSearchable(id: String,
+                               text: Binding<String>,
                                placement: SearchFieldPlacement = .automatic,
                                prompt: Text? = nil) -> some View {
         self.searchable(text: text,
                         placement: placement,
                         prompt: prompt)
-        .modifier(TrackingSearchableModifier(text: text,
-                                             accessibilityIdentifier: accessibilityIdentifier))
+        .modifier(LensSearchableModifier(text: text,
+                                         accessibilityIdentifier: id))
     }
 }
 
-struct TrackingSearchableModifier: ViewModifier {
+struct LensSearchableModifier: ViewModifier {
     
     @Binding var text: String
     let accessibilityIdentifier: String

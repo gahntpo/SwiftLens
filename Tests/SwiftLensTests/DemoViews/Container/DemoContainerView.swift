@@ -12,13 +12,12 @@ struct DemoContainerView: View {
     var body: some View {
         VStack {
             Text("First")
-                .preferenceTracking(identifier: "First")
-            
+                .lensTracked(id: "First")
             VStack {
                 Text("Second")
-                    .preferenceTracking(identifier: "Second")
+                    .lensTracked(id: "Second")
                 Text("Third")
-                    .preferenceTracking(identifier: "Third")
+                    .lensTracked(id: "Third")
             }
         }
     }
@@ -36,7 +35,7 @@ struct DemoContainerNestedView: View {
                 Text("Third")
                     .lensTracked(id: "Third")
             }
-            .lensTracked(id: "container")
+            .lensGroup(id: "container")
         }
     }
 }
@@ -80,7 +79,6 @@ struct DemoContainerZStackView: View {
                 }
             }
             .lensGroup(id: "ZStack.container")
-            
         }
     }
 }

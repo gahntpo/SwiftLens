@@ -8,18 +8,19 @@
 import SwiftUI
 
 extension Stepper {
-   public func trackStepper<V: Strideable & Hashable>(
-        accessibilityIdentifier: String,
+   public func lensStepper<V: Strideable & Hashable>(
+        id: String,
         value: Binding<V>
     ) -> some View {
-        self.modifier(TrackingStepperViewModifier(accessibilityIdentifier: accessibilityIdentifier, value: value))
+        self.modifier(LensStepperViewModifier(accessibilityIdentifier: id,
+                                              value: value))
     }
 }
 
-public struct TrackingStepperViewModifier<V>: ViewModifier where V: Strideable & Hashable {
+public struct LensStepperViewModifier<V>: ViewModifier where V: Strideable & Hashable {
     
     let accessibilityIdentifier: String
-     @Binding var value: V
+    @Binding var value: V
     
     @Environment(\.notificationCenter) var notificationCenter
     @Environment(\.isEnabled) var isEnabled

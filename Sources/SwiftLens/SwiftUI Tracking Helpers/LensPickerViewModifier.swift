@@ -1,5 +1,5 @@
 //
-//  TrackingPickerViewModifier.swift
+//  LensPickerViewModifier.swift
 //  SwiftLens
 //
 //  Created by Karin Prater on 28/04/2025.
@@ -8,26 +8,28 @@
 import SwiftUI
 
 extension Picker {
-    public func trackPicker<V: Hashable>(
-        accessibilityIdentifier: String,
+    public func lensPicker<V: Hashable>(
+        id: String,
         selection: Binding<V>
     ) -> some View {
-        self.modifier(TrackingPickerViewModifier(accessibilityIdentifier: accessibilityIdentifier, selection: selection))
+        self.modifier(LensPickerViewModifier(accessibilityIdentifier: id,
+                                             selection: selection))
     }
 }
 
 extension DatePicker {
-    public func trackPicker (
-        accessibilityIdentifier: String,
+    public func lensPicker (
+        id: String,
         selection: Binding<Date>
     ) -> some View {
-        self.modifier(TrackingPickerViewModifier(accessibilityIdentifier: accessibilityIdentifier, selection: selection))
+        self.modifier(LensPickerViewModifier(accessibilityIdentifier: id,
+                                             selection: selection))
     }
 }
 
 //TODO: ColorPicker, MultiDatePicker, PhotoPicker
 
-public struct TrackingPickerViewModifier<V>: ViewModifier where V: Hashable {
+public struct LensPickerViewModifier<V>: ViewModifier where V: Hashable {
     
    let accessibilityIdentifier: String
    @Binding var selection: V

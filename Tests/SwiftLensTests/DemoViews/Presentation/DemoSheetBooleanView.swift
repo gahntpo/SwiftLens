@@ -17,14 +17,15 @@ struct DemoSheetBooleanView: View {
             Button("Show Details") {
                 showDetails.toggle()
             }
-            .trackButton(accessibilityIdentifier: "ShowDetailsButton")
+            .lensButton(id: "ShowDetailsButton")
             
             Text("Demo View")
                 .lensTracked(id: "Demo.View.Text")
         }
-        .trackingSheet(isPresented: $showDetails) {
+        .lensSheet(id: "sheet.content.group",
+                   isPresented: $showDetails, content: {
             DemoSheetContentView(isFavorite: $isFavorite)
-        }
+        })
     }
 }
 
@@ -38,10 +39,11 @@ struct DemoSheetTwoView: View {
             Button("Show Details") {
                 showDetails.toggle()
             }
-            .trackButton(accessibilityIdentifier: "ShowDetailsButton")
-            .trackingSheet(isPresented: $showDetails) {
+            .lensButton(id: "ShowDetailsButton")
+            .lensSheet(id: "sheet.content.group",
+                       isPresented: $showDetails, content: {
                 DemoSheetContentView(isFavorite: $isFavorite)
-            }
+            })
             
             Text("Demo View")
                 .lensTracked(id:  "Demo.View.Text")
@@ -59,12 +61,13 @@ struct DemoSheetThreeView: View {
             Button("Show Details") {
                 showDetails.toggle()
             }
-            .trackButton(accessibilityIdentifier: "ShowDetailsButton")
+            .lensButton(id: "ShowDetailsButton")
             
             Text("Testing Text")
-            .trackingSheet(isPresented: $showDetails) {
-                DemoSheetContentView(isFavorite: $isFavorite)
-            }
+                .lensSheet(id: "sheet.content.group",
+                           isPresented: $showDetails, content: {
+                    DemoSheetContentView(isFavorite: $isFavorite)
+                })
             
             Text("Demo View")
                 .lensTracked(id: "Demo.View.Text")
@@ -88,14 +91,14 @@ struct DemoSheetContentView: View {
             Button("Mark Favorite") {
                 isFavorite = true
             }
-            .trackButton(accessibilityIdentifier: "FavoriteButton")
+            .lensButton(id: "FavoriteButton")
         
             
             // 2) A “Close” button to dismiss the sheet
             Button("Close") {
                 dismiss()
             }
-            .trackButton(accessibilityIdentifier: "CloseSheetButton")
+            .lensButton(id: "CloseSheetButton")
         }
         .padding()
     }

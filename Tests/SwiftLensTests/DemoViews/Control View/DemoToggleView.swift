@@ -19,7 +19,7 @@ struct DemoToggleView: View {
         VStack {
             
             Toggle("Toogle", isOn: $vm.isTrue)
-                .trackToggle(accessibilityIdentifier: "CheckList_toggle",
+                .lensToggle(id: "CheckList_toggle",
                              value: $vm.isTrue)
                 .toggleStyle(.button)
             

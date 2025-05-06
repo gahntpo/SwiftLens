@@ -17,12 +17,14 @@ struct DemoFullScreenCoverView: View {
             Button("Show Presentation") {
                 fullScreenCoverIsShown.toggle()
             }
-            .trackButton(accessibilityIdentifier: "ShowPresentationButton")
+            .lensButton(id: "ShowPresentationButton")
             
             Text("Demo View")
                 .lensTracked(id: "Demo.View.Text")
         }
-        .trackingFullScreenCover(isPresented: $fullScreenCoverIsShown, content: {
+        .lensFullScreenCover(id: "fullscreencover.content.group",
+                             isPresented: $fullScreenCoverIsShown,
+                             content: {
             DemoSheetContentView(isFavorite: $isFavorite)
         })
     }
@@ -38,12 +40,14 @@ struct DemoFullScreenCoverItemView: View {
             Button("Show Details") {
                 selectedItem = .american
             }
-            .trackButton(accessibilityIdentifier: "ShowPresentationButton")
+            .lensButton(id: "ShowPresentationButton")
             
             Text("Demo View")
                 .lensTracked(id: "Demo.View.Text")
         }
-        .trackingFullScreenCover(item: $selectedItem, content: { _ in
+        .lensFullScreenCover(id: "fullscreencover.content.group",
+                             item: $selectedItem,
+                             content: { _ in
             DemoSheetContentView(isFavorite: $isFavorite)
         })
     }

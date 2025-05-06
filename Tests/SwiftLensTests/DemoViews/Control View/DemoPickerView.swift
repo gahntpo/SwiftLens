@@ -29,13 +29,13 @@ struct DemoPickerView: View {
                     Text($0.rawValue)
                 }
             }
-             .trackPicker(accessibilityIdentifier: "demo_picker",
+             .lensPicker(id: "demo_picker",
                           selection: $selectedCategory)
             
               
             DatePicker("date", selection: $selectedDate)
-                .trackPicker(accessibilityIdentifier: "demo_date_picker",
-                             selection: $selectedDate)
+                .lensPicker(id: "demo_date_picker",
+                            selection: $selectedDate)
         }
     }
 }

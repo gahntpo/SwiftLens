@@ -35,8 +35,8 @@ struct DemoSearchableView: View {
                 Text(item.name)
                     .lensTracked(id: "item.\(item.id)")
             }
-            .trackSearchable(text: $viewModel.searchText,
-                            accessibilityIdentifier: "searchtext")
+            .lensSearchable(id: "searchtext",
+                            text: $viewModel.searchText)
         }
     }
 }

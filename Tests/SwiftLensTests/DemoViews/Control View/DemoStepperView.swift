@@ -17,7 +17,7 @@ struct DemoStepperView: View {
             Stepper(value: $quantity, in: 1...10) {
                 Text("\(quantity)")
             }
-            .trackStepper(accessibilityIdentifier: "demo_stepper",
+            .lensStepper(id: "demo_stepper",
                           value: $quantity)
        
       }

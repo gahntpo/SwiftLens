@@ -7,14 +7,14 @@
 import SwiftUI
 
 extension Toggle {
-   public func trackToggle(accessibilityIdentifier: String,
-                     value: Binding<Bool>) -> some View {
-        self.modifier(TrackingToggleViewModifier(accessibilityIdentifier: accessibilityIdentifier,
+    public func lensToggle(id: String,
+                           value: Binding<Bool>) -> some View {
+        self.modifier(LensToggleViewModifier(accessibilityIdentifier: id,
                                                  value: value))
     }
 }
 
-public struct TrackingToggleViewModifier: ViewModifier {
+public struct LensToggleViewModifier: ViewModifier {
     
     let accessibilityIdentifier: String
     @Binding var value: Bool
