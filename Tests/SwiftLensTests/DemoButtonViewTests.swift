@@ -54,7 +54,8 @@ struct DemoButtonViewTests {
     @Suite("Test DemoButtonView Empty Content")
     struct DemoButtonViewEmptyTests {
         @MainActor
-        @Test("Empty state placeholder shown") func demoButtonView_when_no_items_then_empty_state_view_visible() async throws {
+        @Test("Empty state placeholder shown")
+        func demoButtonView_when_no_items_then_empty_state_view_visible() async throws {
             // ---- SYSTEM ----
             let vm = DefaultViewModel()
             let sut = UIUnderTest { _ in
@@ -152,9 +153,9 @@ struct DemoButtonViewTests {
             let sut = UIUnderTest { sut in
                 DemoButtonView(viewModel: vm)
             }
+            let removedId = vm.items.last?.id ?? UUID()
             
             // ---- WHEN ----
-            let removedId = vm.items.last?.id ?? UUID()
             sut.simulator.buttonTap(withID: "RemoveLastButton")
             
             // ---- THEN: Updates to View ----

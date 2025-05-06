@@ -19,6 +19,7 @@ struct NavigationListTests {
         // ---- SYSTEM ----
         let service = MockFetcherService()
         let fetcher = CategoryFetcher(service: service)
+        fetcher.categories = Category.allCases
         
         let sut = UIUnderTest { sut in
             DemoListView(fetcher: fetcher,
@@ -28,9 +29,7 @@ struct NavigationListTests {
         
         // ---- WHEN ----
         
-        
         // ---- THEN ----
-       // try await Task.sleep(nanoseconds: 1000_000_000)
         try await sut.observer.waitForViewCount(
             withViewIDPrefix: "link.category.",
             expected: service.categories.count
@@ -48,6 +47,7 @@ struct NavigationListTests {
         // ---- SYSTEM ----
         let service = MockFetcherService()
         let fetcher = CategoryFetcher(service: service)
+        fetcher.categories = Category.allCases
         
         let sut = UIUnderTest { sut in
             DemoNavigationView(fetcher: fetcher,
@@ -57,9 +57,7 @@ struct NavigationListTests {
         
         // ---- WHEN ----
         
-        
         // ---- THEN ----
-       // try await Task.sleep(nanoseconds: 1000_000_000)
         try await sut.observer.waitForViewCount(
             withViewIDPrefix: "link.category.",
             expected: service.categories.count
@@ -79,6 +77,7 @@ struct NavigationListTests {
         // ---- SYSTEM ----
         let service = MockFetcherService()
         let fetcher = CategoryFetcher(service: service)
+        fetcher.categories = Category.allCases
         
         let sut = UIUnderTest { sut in
             TabView {
@@ -99,8 +98,7 @@ struct NavigationListTests {
         }
         
         // ---- WHEN ----
-        
-        
+
         // ---- THEN ----
        // try await Task.sleep(nanoseconds: 1000_000_000)
         try await sut.observer.waitForViewCount(
@@ -115,18 +113,19 @@ struct NavigationListTests {
         }
     }
     
-    /*
+    
     @available(iOS 16.0, *)
     @MainActor
     @Test func testListView_in_navigationstack_when_press_category_link_then_show_detail() async throws {
         // ---- SYSTEM ----
         let service = MockFetcherService()
         let fetcher = CategoryFetcher(service: service)
+        fetcher.categories = Category.allCases
         
         let sut = UIUnderTest { sut in
             DemoNavigationView(fetcher: fetcher,
-                                  containerStyle: .scrollview,  // ❌ does not work for: list, form
-                                  rowContentStyle: .navigationlink)
+                               containerStyle: .scrollview,  // ❌ does not work for: list, form
+                               rowContentStyle: .navigationlink)
         }
         
         guard let targetCategory = service.categories.first else {
@@ -148,6 +147,4 @@ struct NavigationListTests {
         // ---- THEN: detail is shown ----
         try await sut.observer.waitForViewVisible(withID: "detail.category.\(targetCategory.id)")
     }
-     */
-
 }

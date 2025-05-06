@@ -14,7 +14,7 @@ struct ContainerViewTests {
 
     @MainActor
     @Test
-    func container_tests() async throws {
+    func vstack_with_multiple_children_has_multiple_observer_values() async throws {
         // —— SYSTEM SETUP ——
         let sut = UIUnderTest { sut in
             DemoContainerView()
@@ -28,7 +28,7 @@ struct ContainerViewTests {
     
     @MainActor
     @Test
-    func nested_container_tests() async throws {
+    func nested_vstack_with_children_has_observer_values_representing_nesting() async throws {
         // —— SYSTEM SETUP ——
         let sut = UIUnderTest { sut in
             DemoContainerNestedView()
@@ -44,12 +44,12 @@ struct ContainerViewTests {
         #expect(containerView?.children[0].identifier == "Second")
         #expect(containerView?.children[1].identifier == "Third")
         
-        sut.observer.printValues()
+       // sut.observer.printValues()
     }
     
     @MainActor
     @Test
-    func background_container_tests() async throws {
+    func vstack_with_background_has_multiple_observer_values_in_parallel() async throws {
         // —— SYSTEM SETUP ——
         let sut = UIUnderTest { sut in
             DemoContainerBackgroundView()
@@ -64,17 +64,17 @@ struct ContainerViewTests {
         #expect(containerView?.children[0].identifier == "Second")
         #expect(containerView?.children[1].identifier == "Third")
         
-        sut.observer.printValues()
+       // sut.observer.printValues()
     }
     
     @MainActor
     @Test
-    func zstack_container_tests() async throws {
+    func zstack_with_multiple_subviews_has_multiple_observer_values_in_parallel() async throws {
         // —— SYSTEM SETUP ——
         let sut = UIUnderTest { sut in
             DemoContainerZStackView()
         }
-        sut.observer.printValues()
+       // sut.observer.printValues()
         
         #expect(sut.observer.values.count == 2)
         #expect(sut.observer.containsView(withID: "First")) // background view in parallel to container
@@ -85,6 +85,6 @@ struct ContainerViewTests {
         #expect(containerView?.children[1].identifier == "Second")
         #expect(containerView?.children[2].identifier == "Third")
         
-        sut.observer.printValues()
+       // sut.observer.printValues()
     }
 }

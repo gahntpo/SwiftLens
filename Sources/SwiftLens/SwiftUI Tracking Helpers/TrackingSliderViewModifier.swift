@@ -4,6 +4,14 @@
 //
 //  Created by Karin Prater on 28/04/2025.
 //
+
+/*
+ Slider tracking
+ - does not pass all values -> might be to much during slider dragging
+ - value is passed when Slider calls onEditingChanged
+ */
+
+
 import SwiftUI
 
 public struct TrackingSlider: View {
@@ -30,7 +38,6 @@ public struct TrackingSlider: View {
             }
         }
         .onReceive(notificationCenter.publisher(for: .simulateSliderChange)) { notification in
-            print("slider value changed \(notification)")
             if let id = notification.userInfo?["id"] as? String,
                self.accessibilityIdentifier == id,
                let value = notification.userInfo?["value"] as? Double {

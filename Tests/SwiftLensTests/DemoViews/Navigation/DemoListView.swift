@@ -29,13 +29,7 @@ struct DemoListView: View {
         VStack {
             switch fetcher.state {
                 case .idle:
-                   // container
-                    List {
-                        ForEach(fetcher.categories) { category in
-                            CategoryRow(category: category,
-                                        contentStyle: rowContentStyle)
-                        }
-                    }
+                    container
                 case .loading:
                     ProgressView()
                 case .error(let string):

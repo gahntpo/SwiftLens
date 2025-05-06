@@ -57,9 +57,7 @@ public struct TrackingButtonStyle: PrimitiveButtonStyle {
           .onReceive(notificationCenter.publisher(for: .simulateButtonTap)) { notification in
               if let id = notification.userInfo?["id"] as? String,
                  self.accessibilityIdentifier == id {
-                  print("notification received -> simulate button press")
                   configuration.trigger()
-                  //TODO: add visual indicator to show what button was triggered (only if custom flag)
               }
           }
           .accessibilityIdentifier(accessibilityIdentifier)

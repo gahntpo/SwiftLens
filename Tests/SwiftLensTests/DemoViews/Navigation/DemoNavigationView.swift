@@ -42,8 +42,5 @@ struct CategoryDetailView: View {
         }
         .preferenceTracking(identifier: "detail.category.\(category.id)",
                             viewName: "DetailView")
-        .onAppear {
-            print("--> detail appear for \(category.title)")
-        }
     }
 }

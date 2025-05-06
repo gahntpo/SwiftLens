@@ -41,9 +41,9 @@ struct DemoTextFieldView<VM: TestableTextViewModelProtocol>: View  {
                 .trackTextField(accessibilityIdentifier: "demo_textfield",
                                 text: $viewModel.text)
                 .textFieldStyle(.roundedBorder)
-                .onSubmit {
-                    print("submit outside still works")
-                }
+              //  .onSubmit {
+              //      print("submit outside still works")
+              //  }
             
             
         }

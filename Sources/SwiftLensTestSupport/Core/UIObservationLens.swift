@@ -104,7 +104,7 @@ final class UIObservationLens: ObservableObject {
             {
                 $0.flattened().filter { $0.identifier.hasPrefix(withViewIDPrefix) }.count == expected
             },
-            errorMessage: "Expected view visible with identifier prefix: \(withViewIDPrefix) visible \(expected) times",
+            errorMessage: "Expected view visible with identifier prefix: '\(withViewIDPrefix)' visible \(expected) times",
             timeout: timeout
         )
     }

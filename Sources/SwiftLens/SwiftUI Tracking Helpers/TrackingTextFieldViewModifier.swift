@@ -50,11 +50,9 @@ public struct TrackingTextFieldViewModifier: ViewModifier {
                        "isEnabled" : isEnabled]
             )
             .onChange(of: text) { newValue in
-           // .onChange(of: text) { _, newValue in
                 sendTextFieldChange(value: newValue)
             }
             .onChange(of: isFocused) { newValue in
-            // .onChange(of: isFocused, { oldValue, newValue in
                 sendTextFieldFocusChange(value: newValue)
             }
             .onReceive(notificationCenter.publisher(for: .simulateTextFieldChange)) { notif in
@@ -115,10 +113,9 @@ public struct TrackingTextFieldViewModifier: ViewModifier {
               let notifId = notif.userInfo?["id"] as? String,
               notifId == accessibilityIdentifier,
         let focused = notif.userInfo?["focused"] as? Bool else {
-            print("receivedTextFieldCommit - failure - \(notif)")
             return
         }
-        print("receivedTextFieldCommit - go")
+
         self.isFocused = focused
         // You can trigger any special onCommit logic here if needed
         // (might need custom behavior depending on your view)

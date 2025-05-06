@@ -88,7 +88,6 @@ struct DemoSheetContentView: View {
                 )
             
             Button("Mark Favorite") {
-                print("mark as favorite")
                 isFavorite = true
             }
             .trackButton(accessibilityIdentifier: "FavoriteButton")

@@ -8,32 +8,32 @@ struct ControlViewTests {
     @Suite("Test Demo Toggle View")
     struct ToggleTests {
         @MainActor
-        @Test("Initial views visible")
-        func demoToggleView_initial_visible() async throws {
+        @Test("Initial views visible", arguments: [true, false])
+        func toggle_ui_show_initial_state_for(isOn: Bool) async throws {
             
             // ---- SYSTEM ----
             let vm = ToggleViewModel()
+            vm.isTrue = isOn
             
             let sut = UIUnderTest { sut in
                 DemoToggleView(vm: vm)
             }
             
             // ---- WHEN ----
-            #expect(!vm.isTrue)
-            
             
             // ---- THEN ----
             #expect(sut.observer.containsView(withID: "CheckList_toggle"))
-            #expect(sut.observer.isToggleOff(forViewID: "CheckList_toggle"))
-            #expect(sut.observer.containsNotView(withID: "text.toggled.visible"))
+            
+            let visibileToggleState = sut.observer.toggleState(forViewID: "CheckList_toggle")
+            #expect(visibileToggleState == isOn, "expect toggle to show state from viewmodel")
         }
         
         @MainActor
         @Test("Press toggle update ViewModel state")
-        func demoToggleView_when_toggle_update_ViewModel_state() async throws {
+        func toggleView_when_toggle_simulated_then_ViewModel_state_is_updated() async throws {
             // ---- SYSTEM ----
             let vm = ToggleViewModel()
-            
+            #expect(!vm.isTrue)
             let sut = UIUnderTest { sut in
                 DemoToggleView(vm: vm)
             }
@@ -47,7 +47,7 @@ struct ControlViewTests {
         
         @MainActor
         @Test("Press toggle update UI")
-        func demoToggleView_when_toggle_update_UI() async throws {
+        func toggleView_when_toggle_isOn_then_condional_view_is_shown() async throws {
             // ---- SYSTEM ----
             let vm = ToggleViewModel()
             
@@ -71,7 +71,7 @@ struct ControlViewTests {
         
         @MainActor
         @Test("Initial views state")
-        func demoPickerView_initial_visible() async throws {
+        func picker_ui_show_initial_selection() async throws {
             // ---- SYSTEM ----
             let sut = UIUnderTest { sut in
                 DemoPickerView()
@@ -79,7 +79,6 @@ struct ControlViewTests {
             
             // ---- WHEN ----
           
-            
             // ---- THEN ----
             #expect(sut.observer.containsView(withID: "demo_picker"))
             #expect(sut.observer.value(forViewID: "demo_picker", key: "value") as? FoodCategory == .american)
@@ -88,15 +87,14 @@ struct ControlViewTests {
         }
         
         @MainActor
-        @Test("Press picker to change state")
-        func demoPickerView_when_picker_changed_then_state_change() async throws {
+        @Test("Press picker to change state", arguments: [FoodCategory.chinese, .indian, .italian, .mexican])
+        func picker_change_selection(to newSelection: FoodCategory) async throws {
             // ---- SYSTEM ----
             let sut = UIUnderTest { sut in
                 DemoPickerView()
             }
             
             // ---- WHEN ----
-            let newSelection = FoodCategory.chinese
             sut.simulator.picker(withID: "demo_picker", to: newSelection)
             
             // ---- THEN ----
@@ -106,7 +104,7 @@ struct ControlViewTests {
         
         @MainActor
         @Test("Press date picker to change state")
-        func demoPickerView_when_date_picker_changed_then_state_change() async throws {
+        func date_picker_change_selection() async throws {
             // ---- SYSTEM ----
             let sut = UIUnderTest { sut in
                 DemoPickerView()
@@ -131,14 +129,13 @@ struct ControlViewTests {
         
         @MainActor
         @Test("Initial views state")
-        func demoSliderView_initial_visible() async throws {
+        func slider_ui_shows_initial_selection() async throws {
             // ---- SYSTEM ----
             let sut = UIUnderTest { sut in
                 DemoSliderView()
             }
             
             // ---- WHEN ----
-            
             
             // ---- THEN ----
             #expect(sut.observer.containsView(withID: "demo-slider"))
@@ -146,15 +143,14 @@ struct ControlViewTests {
         }
         
         @MainActor
-        @Test("Change slider views state")
-        func demoSliderView_change_slider_state() async throws {
+        @Test("Change slider views state", arguments: [Double(2), Double(400.5), Double(23.005)])
+       func slider_change_selection(to newValue: Double) async throws {
             // ---- SYSTEM ----
             let sut = UIUnderTest { sut in
                 DemoSliderView()
             }
             
             // ---- WHEN ----
-            let newValue = Double(2)
             sut.simulator.slider(withID: "demo-slider", to: newValue)
             
             // ---- THEN ----
@@ -170,14 +166,13 @@ struct ControlViewTests {
         
         @MainActor
         @Test("Initial views state")
-        func demoStepperView_initial_visible() async throws {
+        func stepper_ui_shows_initial_selection() async throws {
             // ---- SYSTEM ----
             let sut = UIUnderTest { sut in
                 DemoStepperView()
             }
             
             // ---- WHEN ----
-            
             
             // ---- THEN ----
             #expect(sut.observer.containsView(withID: "demo_stepper"))
@@ -185,15 +180,14 @@ struct ControlViewTests {
         }
         
         @MainActor
-        @Test("Change slider views state")
-        func demoStepperView_change_slider_state() async throws {
+        @Test("Change slider views state", arguments: [0.1, 23.4, 100])
+         func steper_change_selection(to newValue: CGFloat) async throws {
             // ---- SYSTEM ----
             let sut = UIUnderTest { sut in
                 DemoStepperView()
             }
             
             // ---- WHEN ----
-            let newValue = CGFloat(2)
             sut.simulator.stepper(withID: "demo_stepper", to: newValue)
             
             // ---- THEN ----
@@ -208,7 +202,7 @@ struct ControlViewTests {
     struct DemoTextFieldViewTests {
         @MainActor
         @Test("Initial state with empty text")
-        func demoTextFieldView_initial_items_visible() async throws {
+        func textField_ui_shows_initial_text() async throws {
             // ---- SYSTEM ----
             let vm = DefaultTextViewModel()
             let sut = UIUnderTest { sut in
@@ -225,8 +219,8 @@ struct ControlViewTests {
         }
         
         @MainActor
-        @Test("Change text field´s text")
-        func demoTextFieldView_when_textfield_change_viewmodel_update() async throws {
+        @Test("Change text field state", arguments: ["f", "fi", "first", "first long text"])
+        func textfield_change_selection(to newValue: String) async throws {
             // ---- SYSTEM ----
             let vm = DefaultTextViewModel()
             let sut = UIUnderTest { sut in
@@ -234,7 +228,25 @@ struct ControlViewTests {
             }
             
             // ---- WHEN ----
+            sut.simulator.textField(withID: "demo_textfield", to: newValue)
+            
+            // ---- THEN ----
+            try await sut.observer.waitForView(withID: "demo_textfield", hasValue: newValue)
+            #expect(sut.observer.textFieldText(forViewID: "demo_textfield") == newValue)
+        }
+        
+        
+        @MainActor
+        @Test("Change text field´s text and pass value to view model")
+        func textfield_change_then_viewmodel_update() async throws {
+            // ---- SYSTEM ----
+            let vm = DefaultTextViewModel()
+            let sut = UIUnderTest { sut in
+                DemoTextFieldView(viewModel: vm)
+            }
             let newValue = "new text"
+            
+            // ---- WHEN ----
             sut.simulator.textField(withID: "demo_textfield", to: newValue)
             
             // ---- THEN ----
@@ -249,7 +261,7 @@ struct ControlViewTests {
         
         @MainActor
         @Test("Press Enter trigger view model func")
-        func demoTextFieldView_when_textfield_enter_then_viewmodel_func_called() async throws {
+        func press_enter_then_viewmodel_func_called() async throws {
             // ---- SYSTEM ----
             let vm = MockTextViewModel()
             let sut = UIUnderTest { sut in
@@ -282,7 +294,7 @@ struct ControlViewTests {
         @available(iOS 16.0, *)
         @MainActor
         @Test("Initial state with empty text")
-        func demoSearchableView_initial_items_visible() async throws {
+        func searchable_textField_shows_initially_empty_text() async throws {
             // ---- SYSTEM ----
             let vm = SearchViewModel()
             let sut = UIUnderTest { sut in
@@ -300,8 +312,8 @@ struct ControlViewTests {
         
         @available(iOS 16.0, *)
         @MainActor
-        @Test("Change text field´s text")
-        func demoSearchableView_when_textfield_change_viewmodel_update() async throws {
+        @Test("Change text field state", arguments: ["f", "fi", "first", "first long text"])
+        func searchable_textfield_change_selection(to newValue: String) async throws {
             // ---- SYSTEM ----
             let vm = SearchViewModel()
             let sut = UIUnderTest { sut in
@@ -309,7 +321,25 @@ struct ControlViewTests {
             }
             
             // ---- WHEN ----
-            let newValue = "first"
+            sut.simulator.textField(withID: "searchtext", to: newValue)
+            
+            // ---- THEN ----
+            try await sut.observer.waitForView(withID: "searchtext", hasValue: newValue)
+            #expect(sut.observer.textFieldText(forViewID: "searchtext") == newValue)
+        }
+        
+        @available(iOS 16.0, *)
+        @MainActor
+        @Test("Change text field´s text", arguments: [("f", 1), ("first", 1), ("first text", 0)])
+        func searchable_selection_updates_search_results_in_list(for newValue: String,
+                                                                 toResultCount: Int) async throws {
+            // ---- SYSTEM ----
+            let vm = SearchViewModel()
+            let sut = UIUnderTest { sut in
+                DemoSearchableView(viewModel: vm)
+            }
+            
+            // ---- WHEN ----
             sut.simulator.textField(withID: "searchtext", to: newValue)
             
             // ---- THEN ----
@@ -317,7 +347,7 @@ struct ControlViewTests {
             
             //visible search result: only one item in list:
             try await sut.observer.waitForViewCount(withViewIDPrefix: "item.",
-                                                    expected: 1)
+                                                    expected: toResultCount)
         }
     }
 }

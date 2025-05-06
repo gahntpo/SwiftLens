@@ -39,11 +39,9 @@ public struct TrackingStepperViewModifier<V>: ViewModifier where V: Strideable &
                        "isEnabled" : isEnabled]
             )
             .onChange(of: value) { newValue in
-           // .onChange(of: value) { _, newValue in
                 sendStepperNotification(value: newValue)
             }
             .onReceive(notificationCenter.publisher(for: .simulateStepperChange)) { notif in
-                print(notif)
                 receivedStepperNotification(notif)
             }
             .accessibilityIdentifier(accessibilityIdentifier)

@@ -34,7 +34,6 @@ public struct TrackingToggleViewModifier: ViewModifier {
                                 viewName: String(describing: Self.self),
                                 info: ["value" : value,
                                        "isEnabled" : isEnabled])
-           // .onChange(of: value) { oldValue, newValue in
             .onChange(of: value) {newValue in
                 sendToggleNotification(value: newValue)
             }

@@ -50,7 +50,6 @@ public struct TrackingPickerViewModifier<V>: ViewModifier where V: Hashable {
                        "isEnabled" : isEnabled]
             )
             .onChange(of: selection) { newValue in
-          //  .onChange(of: selection) { _, newValue in
                 sendPickerNotification(value: newValue)
             }
             .onReceive(notificationCenter.publisher(for: .simulatePickerChange)) { notif in
@@ -69,7 +68,6 @@ public struct TrackingPickerViewModifier<V>: ViewModifier where V: Hashable {
     }
 
     private func receivedPickerNotification(_ notif: NotificationCenter.Publisher.Output) {
-        print("receivedPickerNotification \(notif)")
         guard notif.name == .simulatePickerChange,
               let notifId = notif.userInfo?["id"] as? String,
               let newVal = notif.userInfo?["value"] as? V,
