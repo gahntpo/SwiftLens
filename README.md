@@ -184,28 +184,28 @@ SwiftLens supports any SwiftUI view where you can apply `.lensTracked(id:)`, `.l
 
 Check out the [Usage Guide](./guide_api_coverage.md) for full API coverage.
 
----
 
 ### Is it using private APIs?
 
 Nope — SwiftLens uses only **public SwiftUI APIs**, specifically the `PreferenceKey` system and `NotificationCenter`. It’s safe for production code. The `SwiftLens` module adds minimal tracking logic to your views. Your main app remains clean and test-friendly. 
-If you are okay with changing this:
+
+
+### Do I need to touch my production code to make this work?
+You have to add minimal code to your production code. Here is an example where I have the following
 ```swift
 Button("Remove Last") {
     viewModel.removeLast()
 }
 .accessibilityIdentifier("RemoveLastButton")
 ```
-to this:
+and change to this:
 ```swift
 Button("Remove Last") {
     viewModel.removeLast()
 }
 .lensButton(id: "RemoveLastButton")
 ```
-
-
----
+The modifiers like `lensButton` add the same id for the accessibilityIdentifier identifier. You dont need to write both these lines.
 
 ### How do I add it to my Xcode project?
 
@@ -216,7 +216,6 @@ Ensure you're linking the libraries to the correct targets:
 
 See the [Installation](#installation) section above for instructions using Swift Package Manager.
 
----
 
 ### Is SwiftLens compatible with Swift Package Manager?
 
@@ -228,13 +227,10 @@ Yes — install it via SPM:
 
 Add `SwiftLens` to your app target, and `SwiftLensTestSupport` to your test target.
 
----
-
 ### How do I use it in my project?
 
 Follow the [Getting Started](#-getting-started) section to set up view tracking and tests. You can also explore deeper use cases in the [Guide Directory](./guide_view_tracking.md).
 
----
 
 ### How fast do these tests run?
 
