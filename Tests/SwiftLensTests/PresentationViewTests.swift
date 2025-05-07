@@ -152,9 +152,9 @@ struct PresentationViewTests {
             try await sut.observer.waitForViewVisible(withID: "ShowDetailsButton")
             
             // —— SHOW SHEET ——
-            sut.interactor.tapButton(withID: "ShowDetailsButton")
-            
-            try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
+           // sut.interactor.tapButton(withID: "ShowDetailsButton")
+           // try await sut.observer.waitForViewVisible(withID: "FavoriteButton")
+            try await sut.waitForAndTap("ShowDetailsButton")
             
             // —— ACTION: close the sheet ——
             sut.interactor.tapButton(withID: "CloseSheetButton")

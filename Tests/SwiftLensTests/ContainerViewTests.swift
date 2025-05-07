@@ -48,6 +48,19 @@ struct ContainerViewTests {
     }
     
     @MainActor
+    @Test func testing_when_placeholder_view_then_use_container_key_for_assertions() async throws {
+        // —— SYSTEM SETUP ——
+        let sut = LensWorkBench { sut in
+            DemoContainerPlaceholderView()
+        }
+        
+        #expect(sut.observer.containsView(withID: "container"))
+        #expect(sut.observer.containsView(withID: "First"))
+        
+        sut.observer.printValues()
+    }
+    
+    @MainActor
     @Test
     func vstack_with_background_has_multiple_observer_values_in_parallel() async throws {
         // —— SYSTEM SETUP ——

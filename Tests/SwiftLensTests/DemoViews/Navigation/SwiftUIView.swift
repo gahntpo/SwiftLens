@@ -6,13 +6,39 @@
 //
 
 import SwiftUI
+import SwiftLens
 
-struct SwiftUIView: View {
+@available(iOS 16.0, *)
+struct DemoListItemView: View {
+
+    @ObservedObject var fetcher: CategoryFetcher
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            CategoryListView(fetcher: fetcher)
+                .navigationDestination(for: Category.self) { category in
+                    CategoryDetailView(category: category)
+                }
+        }
     }
 }
 
-#Preview {
-    SwiftUIView()
+@available(iOS 16.0, *)
+fileprivate struct CategoryListView: View {
+    
+    @ObservedObject var fetcher: CategoryFetcher
+    @State private var selection: Category?
+    
+    var body: some View {
+        LensList(fetcher.categories, id: \.self) { category in
+            NavigationLink(value: category) {
+                Label(category.title, systemImage: category.icon)
+            }
+            .lensButton(id: "link.category.\(category.id)")
+        }
+        .task {
+            await fetcher.loadCategories()
+        }
+        .lensGroup(id: "category.list.view.\(fetcher.state.description)")
+    }
 }

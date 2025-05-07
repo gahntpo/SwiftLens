@@ -40,6 +40,20 @@ struct DemoContainerNestedView: View {
     }
 }
 
+struct DemoContainerPlaceholderView: View {
+    var body: some View {
+        VStack {
+            Text("First")
+                .lensTracked(id: "First")
+            
+            VStack {
+                Text("Placeholder")
+            }
+            .lensGroup(id: "container")
+        }
+    }
+}
+
 struct DemoContainerBackgroundView: View {
     var body: some View {
         VStack {

@@ -256,9 +256,3 @@ No view introspection. No thread sleeps. No hidden polling. Just real SwiftUI be
 ### Contributions
 
 Contributions are welcome! If you find edge cases or want to extend support (e.g., tracking gestures, focus state, or other modifiers), feel free to open an issue or submit a PR.
-
-Want to experiment? Try logging view metadata from the `.onPreferenceChange` of `LensCaptureKey` and see what SwiftUI gives you for free.
-
----
-
-Let me know if you want this added directly to a full draft `README.md`, or you'd like help generating `guide_view_tracking.md` next.

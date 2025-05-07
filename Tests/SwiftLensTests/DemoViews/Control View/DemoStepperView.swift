@@ -11,6 +11,7 @@ import SwiftLens
 struct DemoStepperView: View {
     
     @State private var quantity: CGFloat = 1
+    @State private var otherNumber: Double = 1
     
     var body: some View {
         VStack(spacing: 10) {
@@ -20,6 +21,11 @@ struct DemoStepperView: View {
             .lensStepper(id: "demo_stepper",
                           value: $quantity)
        
+            Stepper(value: $otherNumber, in: 1...10) {
+                Text("\(otherNumber)")
+            }
+            .lensStepper(id: "other_stepper",
+                          value: $otherNumber)
       }
     }
 }

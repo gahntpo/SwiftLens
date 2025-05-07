@@ -48,7 +48,6 @@ public struct LensList<Content: View>: View {
                     content
                 }
             }
-            
         }
     }
 }

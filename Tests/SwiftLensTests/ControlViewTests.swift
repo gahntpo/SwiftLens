@@ -26,6 +26,7 @@ struct ControlViewTests {
             
             let visibileToggleState = sut.observer.toggleState(forViewID: "CheckList_toggle")
             #expect(visibileToggleState == isOn, "expect toggle to show state from viewmodel")
+           
         }
         
         @MainActor
@@ -215,7 +216,7 @@ struct ControlViewTests {
     }
     
     //MARK: - TextField
-    @Suite("Test DemoTextFieldView Initial Content")
+    @Suite("Test TextField")
     struct DemoTextFieldViewTests {
         @MainActor
         @Test("Initial state with empty text")
@@ -302,6 +303,38 @@ struct ControlViewTests {
             // ---- THEN ----
             // #expect(vm.didCallAction, "Submit action not called")
 
+        }
+        
+        @MainActor
+        @Test("Change text editor state", arguments: ["f", "fi", "first", "first long text"])
+        func textEditor_change_selection(to newValue: String) async throws {
+            // ---- SYSTEM ----
+            let sut = LensWorkBench { sut in
+                DemoTextEditorView()
+            }
+            
+            // ---- WHEN ----
+            sut.interactor.textField(withID: "demo_texteditor", to: newValue)
+            
+            // ---- THEN ----
+            try await sut.observer.waitForView(withID: "demo_texteditor", hasValue: newValue)
+            #expect(sut.observer.textFieldText(forViewID: "demo_texteditor", equalTo: newValue))
+        }
+        
+        @MainActor
+        @Test("Change SecureField state", arguments: ["f", "fi", "first", "first long text"])
+        func secureField_change_selection(to newValue: String) async throws {
+            // ---- SYSTEM ----
+            let sut = LensWorkBench { sut in
+                DemoSecureFieldView()
+            }
+            
+            // ---- WHEN ----
+            sut.interactor.textField(withID: "demo_securefield", to: newValue)
+            
+            // ---- THEN ----
+            try await sut.observer.waitForView(withID: "demo_securefield", hasValue: newValue)
+            #expect(sut.observer.textFieldText(forViewID: "demo_securefield", equalTo: newValue))
         }
     }
     
