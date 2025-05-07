@@ -12,7 +12,7 @@ public struct LensCapture: Equatable {
     
     public let viewType: String
     public let identifier: String
-    public let info: [String: AnyHashable]
+    public var info: [String: AnyHashable]
     
     public var children: [LensCapture] = [] // use transformPreferences
     

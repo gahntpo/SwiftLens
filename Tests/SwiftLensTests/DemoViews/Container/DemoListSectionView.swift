@@ -18,14 +18,18 @@ struct DemoListSectionView: View {
                 }
             }
             .lensGroup(id: "section.first")
+           
+            Section("Next") {
+                ForEach(5..<10, id: \.self) { index in
+                    Text("item \(index)")
+                        .lensTracked(id: "item.\(index)")
+                }
+            }
             .transformPreference(LensCaptureKey.self) { capture in
                 capture[0].info["section"] = "section.first"
             }
-            
-            Section("Next") {
-                Text("Next")
-            }
         }
+        .lensGroup(id: "list")
         .onPreferenceChange(LensCaptureKey.self) { meta in
             print(meta)
         }

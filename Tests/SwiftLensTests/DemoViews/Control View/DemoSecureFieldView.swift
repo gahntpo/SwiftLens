@@ -1,3 +1,11 @@
+//
+//  DemoSecureFieldView.swift
+//  SwiftLens
+//
+//  Created by Karin Prater on 06/05/2025.
+//
+import SwiftUI
+
 struct DemoSecureFieldView: View {
     
     @State private var passwordText = ""

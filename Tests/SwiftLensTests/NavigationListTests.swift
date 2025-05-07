@@ -15,6 +15,32 @@ struct NavigationListTests {
 
     @available(iOS 16.0, *)
     @MainActor
+    @Test func lenslist_shows_category_rows() async throws {
+        // ---- SYSTEM ----
+        let service = MockFetcherService()
+        let fetcher = CategoryFetcher(service: service)
+        fetcher.categories = Category.allCases
+        
+        let sut = LensWorkBench { sut in
+            DemoListItemView(fetcher: fetcher)
+        }
+        
+        // ---- WHEN ----
+        
+        // ---- THEN ----
+        try await sut.observer.waitForViewCount(
+            withViewIDPrefix: "link.category.",
+            expected: service.categories.count
+        )
+        for category in service.categories {
+            #expect(sut.observer.containsView(
+                withID: "link.category.\(category.id)"
+            ))
+        }
+    }
+    
+    @available(iOS 16.0, *)
+    @MainActor
     @Test func testListView_when_appear_load_categories_into_list() async throws {
         // ---- SYSTEM ----
         let service = MockFetcherService()

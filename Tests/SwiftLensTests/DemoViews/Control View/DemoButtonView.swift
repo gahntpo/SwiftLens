@@ -80,6 +80,10 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
              .buttonStyle(.borderedProminent)
              .disabled(viewModel.items.isEmpty)
              
+             Button("Other Button") {
+                 
+             }
+             .lensButton(id: "OtherButton")
          }
          .lensGroup(id: "demo.list")
          
