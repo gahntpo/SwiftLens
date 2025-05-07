@@ -5,13 +5,17 @@ SwiftLens helps you ship SwiftUI apps faster by making behavior-driven tests eas
 ## Features
 
 📬 Run your UI tests like unit tests with XCTest/Swift Testing
+
 🔍 Declarative view tracking using .lensTracked(id:), .lensGroup(id:), lensButton(id:)
+
 📋 Observe when views are shown and hidden — no fixed delays or polling needed.
+
 🖐️ Interact with your ui by identifiers e.g. sut.observer.tapButton(withId:)
+
 🧪 Behavior-driven test support via LensWorkBench, LensObserver, LensInteractor
 
-Check out the [Usage Guide](./guide_api_coverage.md) for full API coverage.
 
+Check out the [Usage Guide](./guide_api_coverage.md) for full API coverage.
 
 ## Installation
 
@@ -118,6 +122,7 @@ func toggleView_toggle() async throws {
 ```
 
 #### ✅ Toggled UI becomes visible
+If you want to test if the view with id text.toggled.visible" is shown, you need to wait for the ui to update:
 
 ```swift
 @MainActor
@@ -140,6 +145,36 @@ func toggleView_when_on_then_text_is_visible() async throws {
 }
 ```
 
+You can use 'try await sut.observer.waitForValue()' to wait until the view  is visibile. If it is not shown in a given timeout, the test will through an error. 
+
+You don´t need to relay on fixed delays, which makes these tests fast and reliable ✅🦄 
+
+Here is a few examples of what you can do either by checking directly or using a wait:
+```swift
+try await sut.observer.waitForViewVisible(withID: "sheet.content.group", "sheet did not open")
+try await sut.observer.waitForViewHidden(withID: "sheet.content.group", "sheet was supposed to be closed")
+
+try await sut.observer.waitForValue(forViewID: "CheckList_toggle", equals: true)
+#expect(sut.observer.containsView(withID: "CheckList_toggle"))
+#expect(sut.observer.isToggleOn(forViewID: "CheckList_toggle"))
+
+try await sut.observer.waitForValue(forViewID: "demo_picker", equals: newSelection)
+
+try await sut.observer.waitForViewCount(withViewIDPrefix: "item.", expected: 0)
+#expect(sut.observer.containsView(withID: "First"))
+
+let containerView = sut.observer.values.findView(withID: "container")
+#expect(containerView?.children.count == 2)
+
+```
+
+### More Examples:
+You can look at the test suite for more example:
+- [Container Views: VStack with nestings](./Tests/SwiftLensTests/ContainerViewTests.swift)
+- [Control Views like Toggle, Picker, Slider](./Tests/SwiftLensTests/ControlViewTests.swift)
+- [Example with a button to toggle the visibility of another view](./Tests/SwiftLensTests/DemoButtonViewTests.swift)
+- [NavigationStack test if navigation destination is shown correctly](./Tests/SwiftLensTests/NavigationListTests.swift)
+- [Testing opening sheet and interacting with the content inside the sheet](./Tests/SwiftLensTests/PresentationViewTests.swift)
 
 ## FAQs
 
@@ -149,28 +184,28 @@ SwiftLens supports any SwiftUI view where you can apply `.lensTracked(id:)`, `.l
 
 Check out the [Usage Guide](./guide_api_coverage.md) for full API coverage.
 
----
 
 ### Is it using private APIs?
 
 Nope — SwiftLens uses only **public SwiftUI APIs**, specifically the `PreferenceKey` system and `NotificationCenter`. It’s safe for production code. The `SwiftLens` module adds minimal tracking logic to your views. Your main app remains clean and test-friendly. 
-If you are okay with changing this:
+
+
+### Do I need to touch my production code to make this work?
+You have to add minimal code to your production code. Here is an example where I have the following
 ```swift
 Button("Remove Last") {
     viewModel.removeLast()
 }
 .accessibilityIdentifier("RemoveLastButton")
 ```
-to this:
+and change to this:
 ```swift
 Button("Remove Last") {
     viewModel.removeLast()
 }
 .lensButton(id: "RemoveLastButton")
 ```
-
-
----
+The modifiers like `lensButton` add the same id for the accessibilityIdentifier identifier. You dont need to write both these lines.
 
 ### How do I add it to my Xcode project?
 
@@ -181,7 +216,6 @@ Ensure you're linking the libraries to the correct targets:
 
 See the [Installation](#installation) section above for instructions using Swift Package Manager.
 
----
 
 ### Is SwiftLens compatible with Swift Package Manager?
 
@@ -193,13 +227,10 @@ Yes — install it via SPM:
 
 Add `SwiftLens` to your app target, and `SwiftLensTestSupport` to your test target.
 
----
-
 ### How do I use it in my project?
 
 Follow the [Getting Started](#-getting-started) section to set up view tracking and tests. You can also explore deeper use cases in the [Guide Directory](./guide_view_tracking.md).
 
----
 
 ### How fast do these tests run?
 
