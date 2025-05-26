@@ -5,7 +5,7 @@ import Testing
 
 struct ControlViewTests {
     
-    @Suite("Test Demo Toggle View")
+    @Suite("Toggle")
     struct ToggleTests {
         @MainActor
         @Test("Initial views visible", arguments: [true, false])
@@ -84,7 +84,7 @@ struct ControlViewTests {
         }
     }
     
-    @Suite("Test Demo Picker View")
+    @Suite("Picker")
     struct PickerTests {
         
         @MainActor
@@ -142,7 +142,7 @@ struct ControlViewTests {
     }
     
 
-    @Suite("Test Demo Slider View")
+    @Suite("Slider")
     struct SliderTests {
         
         @MainActor
@@ -179,7 +179,7 @@ struct ControlViewTests {
         }
     }
     
-    @Suite("Test Demo Stepper View")
+    @Suite("Stepper")
     struct StepperTests {
         
         @MainActor
@@ -216,8 +216,8 @@ struct ControlViewTests {
     }
     
     //MARK: - TextField
-    @Suite("Test TextField")
-    struct DemoTextFieldViewTests {
+    @Suite("TextField")
+    struct TextFieldViewTests {
         @MainActor
         @Test("Initial state with empty text")
         func textField_ui_shows_initial_text() async throws {
@@ -338,8 +338,8 @@ struct ControlViewTests {
         }
     }
     
-    @Suite("Test DemoSearchableView Initial Content")
-    struct DemoSearchableTextFieldViewTests {
+    @Suite("Searchable")
+    struct SearchableTextFieldViewTests {
         
         @available(iOS 16.0, *)
         @MainActor

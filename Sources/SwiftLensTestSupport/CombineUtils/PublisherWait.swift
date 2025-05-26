@@ -34,19 +34,19 @@ import Foundation
 import Combine
 
 extension Published.Publisher where Value: Equatable {
-  public func waitUntilMatches(
-         _ target: Value,
-         errorMessage: String,
-         timeout: TimeInterval = 1.0
-     ) async throws {
-         try await self.waitUntilMatches({ $0 == target },
-                                         errorMessage: errorMessage,
-                                         timeout: timeout)
-     }
-    
-  public func waitUntilMatches(
-        _ predicate: @escaping (Value) -> Bool,
+    public func waitUntilMatches(
+        _ target: Value,
         errorMessage: String,
+        timeout: TimeInterval = 1.0
+    ) async throws {
+        try await self.waitUntilMatches({ $0 == target },
+                                        errorMessage: errorMessage,
+                                        timeout: timeout)
+    }
+    
+    public func waitUntilMatches(
+        _ predicate: @escaping (Value) -> Bool,
+        errorMessage: String = "waitUntilMatches failed",
         timeout: TimeInterval = 1.0
     ) async throws {
         let subject = PassthroughSubject<Value, Error>()
@@ -55,7 +55,7 @@ extension Published.Publisher where Value: Equatable {
         let timeoutPublisher = Fail<Value, Error>(error: WaitUntilError.timeout(description: errorMessage))
             .delay(for: .seconds(timeout), scheduler: RunLoop.main)
             .eraseToAnyPublisher()
-            
+        
         let valuePublisher = self
             .mapError { $0 as Error }
             .eraseToAnyPublisher()

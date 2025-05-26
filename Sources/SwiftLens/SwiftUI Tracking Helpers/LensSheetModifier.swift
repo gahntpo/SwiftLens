@@ -77,9 +77,12 @@ struct LensSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
     @State private var liftedPreferences: [LensCapture] = []
     
     var passedPreferences: [LensCapture] {
-        liftedPreferences.isEmpty ? [] : [LensCapture(viewType: String(describing: Self.self),
-                                                      identifier: accessibilityIdentifier,
-                                                      children: liftedPreferences)]
+        guard isPresented else { return [] }
+        guard !liftedPreferences.isEmpty else { return [] }
+        
+        return [LensCapture(viewType: String(describing: Self.self),
+                            identifier: accessibilityIdentifier,
+                            children: liftedPreferences)]
     }
     /*
      Recipe: preferences from content view and sheet are added on same level, one after the other
@@ -104,11 +107,6 @@ struct LensSheetIsPresentedModifier<SheetContent: View>: ViewModifier {
                 sheetContent()
                     .onPreferenceChange(LensCaptureKey.self) { liftedPreferences = $0 }
             }
-            .onChange(of: isPresented) { newValue in
-                 guard newValue == false else { return }
-                       // cleaning after sheet is closed
-                 liftedPreferences = []
-            }
     }
 }
 
@@ -123,14 +121,16 @@ private struct LensSheetItemModifier<Item: Identifiable & Equatable, SheetConten
     @State private var liftedPreferences: [LensCapture] = []
     
     var passedPreferences: [LensCapture] {
-        liftedPreferences.isEmpty ? [] : [LensCapture(viewType: String(describing: Self.self),
-                                                      identifier: accessibilityIdentifier,
-                                                      children: liftedPreferences)]
+        guard item != nil else { return [] }
+        guard !liftedPreferences.isEmpty else { return [] }
+        
+        return [LensCapture(viewType: String(describing: Self.self),
+                            identifier: accessibilityIdentifier,
+                            children: liftedPreferences)]
     }
 
     @ViewBuilder
     func body(content: Content) -> some View {
-        
         content
            // Re‑emit the sheet’s prefs onto the parent’s preference tree
             .background {
@@ -143,12 +143,6 @@ private struct LensSheetItemModifier<Item: Identifiable & Equatable, SheetConten
                 sheetContent(sheetItem)
                 // Listen for changes in the sheet’s preferences
                     .onPreferenceChange(LensCaptureKey.self) { liftedPreferences = $0 }
-            }
-           // .onChange(of: item) { oldValue, newValue in
-            .onChange(of: item) { newValue in
-                guard newValue == nil else { return }
-                // cleaning after sheet is closed
-                liftedPreferences = []
             }
     }
 }

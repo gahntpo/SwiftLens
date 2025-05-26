@@ -79,8 +79,8 @@ public struct LensWorkBench {
          */
     }
     
-    //MARK: - interactions
-    func waitForAndTap(_ id: String) async throws {
+    //MARK: - observation together with interactions
+    func waitForAndTapButton(_ id: String) async throws {
         try await self.observer.waitForViewVisible(withID: id)
         self.interactor.tapButton(withID: id)
     }

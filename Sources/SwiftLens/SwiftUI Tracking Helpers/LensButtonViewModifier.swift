@@ -42,7 +42,7 @@ public struct LensButtonStyle: PrimitiveButtonStyle {
       Button(configuration)
             .lensTracked(
                 id: accessibilityIdentifier,
-                info: ["isEnabled" : isEnabled]
+                info: info(for: configuration)
             )
       //TODO: only add notification if custom flag is set
      // #if DEBUG
@@ -64,4 +64,21 @@ public struct LensButtonStyle: PrimitiveButtonStyle {
                                 object: nil,
                                 userInfo: ["id": accessibilityIdentifier])
     }
+    
+    func info(for configuration: PrimitiveButtonStyleConfiguration) -> [String: AnyHashable] {
+
+        guard let role = configuration.role else {
+            return ["isEnabled" : isEnabled,
+                    "role": 0]
+        }
+        
+        switch role {
+            case .cancel: return ["isEnabled" : isEnabled, "role": 4]
+            case .destructive: return ["isEnabled" : isEnabled, "role": 1]
+            default:
+                return ["isEnabled" : isEnabled, "role": 0]
+        }
+        
+    }
 }
+

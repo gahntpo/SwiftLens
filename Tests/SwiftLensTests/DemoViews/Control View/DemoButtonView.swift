@@ -23,29 +23,37 @@ struct Item: Identifiable {
 
 protocol TestableViewModelProtocol: ObservableObject {
     var items: [Item] { get set }
+    var  deleteDisabled: Bool { get }
     func removeLast()
 }
 
 final class MockViewModel: TestableViewModelProtocol {
     
-    @Published var didCallAction = false
+    @Published var didCallAction = 0
+    
     @Published var items: [Item] = Item.examples
+    @Published var deleteDisabled = false
     
     func removeLast() {
-        didCallAction = true
+        didCallAction += 1
         
         guard items.isEmpty == false else { return }
         items.removeLast()
+        
+        deleteDisabled = items.isEmpty
     }
 }
 
 final class DefaultViewModel: TestableViewModelProtocol {
 
     @Published var items: [Item] = Item.examples
+    @Published var deleteDisabled = false
     
     func removeLast() {
         guard items.isEmpty == false else { return }
         items.removeLast()
+        
+        deleteDisabled = items.isEmpty
     }
 }
 
@@ -73,7 +81,7 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
              
              Divider()
              
-             Button("Remove Last") {
+             Button("Remove Last", role: .destructive) {
                  viewModel.removeLast()
              }
              .lensButton(id: "RemoveLastButton")
@@ -84,6 +92,13 @@ struct DemoButtonView<VM: TestableViewModelProtocol>: View  {
                  
              }
              .lensButton(id: "OtherButton")
+             .disabled(false)
+             
+             Button("Chancel Button", role: .cancel) {
+                 
+             }
+             .lensButton(id: "ChancelButton")
+             .disabled(true)
          }
          .lensGroup(id: "demo.list")
          

@@ -31,7 +31,7 @@ public struct LensCapture: Equatable {
 extension LensCapture: CustomStringConvertible {
     public var description: String {
         """
-         \(viewType) { id: “\(identifier)”\(info.isEmpty ? "" : ", value: \(info)")\(children.isEmpty ? "" : ", children: \(children.map({ $0.identifier}))")}
+         {id: “\(identifier)”\(info.isEmpty ? "" : ", value: \(info)")\(children.isEmpty ? "" : ", children: \(children.map({ $0.identifier}))")}
          """
     }
 }
@@ -74,5 +74,6 @@ public struct LensCaptureKey: PreferenceKey {
         value.append(contentsOf: nextValue())
     }
 }
+
 
 

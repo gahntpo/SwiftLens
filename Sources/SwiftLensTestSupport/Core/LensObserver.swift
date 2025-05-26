@@ -4,7 +4,7 @@
 //  Created by Karin Prater on 28/04/2025.
 //
 
-import Foundation
+import SwiftUI
 import SwiftLens
 
 public
@@ -48,6 +48,12 @@ final class LensObserver: ObservableObject {
         values.value(forViewID: id, key: key)
     }
     
+    public func hasInfo<T: Equatable>(forViewID id: String,
+                                       in key: String = "value",
+                                       equalTo target: T) -> Bool {
+        values.value(forViewID: id, key: key) as? T == target
+    }
+    
     public func enabledState(forViewID id: String) -> Bool? {
         values.value(forViewID: id, key: "isEnabled") as? Bool
     }
@@ -58,6 +64,20 @@ final class LensObserver: ObservableObject {
     
     public func isDisabledState(forViewID id: String) -> Bool {
         enabledState(forViewID: id) == false
+    }
+    
+    public func isButton(forViewID id: String,
+                         role: ButtonRole?) -> Bool {
+        guard let roleRawValue = values.value(forViewID: id, key: "role") as? Int else {
+            return false
+        }
+        
+        switch role {
+            case .cancel: return roleRawValue == 4
+            case .destructive: return roleRawValue == 1
+            default: return roleRawValue == 0
+                
+        }
     }
     
     public func toggleState(forViewID id: String) -> Bool? {
@@ -126,6 +146,17 @@ final class LensObserver: ObservableObject {
         )
     }
 
+    public func wait<T: Equatable>(forViewID id: String,
+                                    infoKey: String = "value",
+                                    equals expected: T,
+                                    timeout: TimeInterval = 1.0) async throws {
+        try await $values.waitUntilMatches(
+            { $0.findView(withID: id)?.info[infoKey] as? T == expected },
+            errorMessage: "Expected value `\(expected)` for view with id: \(id)",
+            timeout: timeout
+        )
+    }
+    
     public func waitForValue<T: Equatable>(forViewID id: String,
                                     equals expected: T,
                                     timeout: TimeInterval = 1.0) async throws {
@@ -144,5 +175,13 @@ final class LensObserver: ObservableObject {
             errorMessage: "Expected textfield focused with identifier: \(id) - \(isFocused ? "focused" : "not focused")",
             timeout: timeout
         )
+    }
+    
+
+    
+    public func waitButton(forViewID id: String, isEnabled: Bool)  async throws  {
+        try await wait(forViewID: id,
+                               infoKey: "isEnabled",
+                               equals: isEnabled)
     }
 }

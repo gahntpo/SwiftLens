@@ -50,9 +50,12 @@ struct LensFullScreenCoverIsPresentedModifier<FullScreenCoverContent: View>: Vie
     @State private var liftedPreferences: [LensCapture] = []
     
     var passedPreferences: [LensCapture] {
-        liftedPreferences.isEmpty ? [] : [LensCapture(viewType: String(describing: Self.self),
-                                                      identifier: accessibilityIdentifier,
-                                                      children: liftedPreferences)]
+        guard isPresented else { return [] }
+        guard !liftedPreferences.isEmpty else { return [] }
+        
+        return [LensCapture(viewType: String(describing: Self.self),
+                            identifier: accessibilityIdentifier,
+                            children: liftedPreferences)]
     }
     
     func body(content: Content) -> some View {
@@ -68,11 +71,6 @@ struct LensFullScreenCoverIsPresentedModifier<FullScreenCoverContent: View>: Vie
                 fullScreenCoverContent()
                     .onPreferenceChange(LensCaptureKey.self) { liftedPreferences = $0 }
             })
-            .onChange(of: isPresented) { newValue in
-                 guard newValue == false else { return }
-                       // cleaning after sheet is closed
-                 liftedPreferences = []
-            }
     }
 }
 
@@ -86,9 +84,12 @@ private struct LensFullScreenCoverItemModifier<Item: Identifiable & Equatable, F
     @State private var liftedPreferences: [LensCapture] = []
 
     var passedPreferences: [LensCapture] {
-        liftedPreferences.isEmpty ? [] : [LensCapture(viewType: String(describing: Self.self),
-                                                      identifier: accessibilityIdentifier,
-                                                      children: liftedPreferences)]
+        guard item != nil else { return [] }
+        guard !liftedPreferences.isEmpty else { return [] }
+        
+        return [LensCapture(viewType: String(describing: Self.self),
+                            identifier: accessibilityIdentifier,
+                            children: liftedPreferences)]
     }
     
     @ViewBuilder
@@ -106,10 +107,5 @@ private struct LensFullScreenCoverItemModifier<Item: Identifiable & Equatable, F
                 fullScreenCoverContent(item)
                     .onPreferenceChange(LensCaptureKey.self) { liftedPreferences = $0 }
             })
-            .onChange(of: item) { newValue in
-                guard newValue == nil else { return }
-                // cleaning after sheet is closed
-                liftedPreferences = []
-            }
     }
 }
