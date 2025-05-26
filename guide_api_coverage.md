@@ -20,8 +20,8 @@ These are interactive views where SwiftLens can track user input:
 | ✅      | `TextEditor`       | `.lensTextEditor(id:text:)`  | `value`, `isEnabled`            |
 | ✅      | `Searchable`       | `.lensSearchable(id:text:)`  | `value` (search text)           |
 | ✅      | `SecureField`      | `.lensTextEditor(id:text:)`  | `value`, `isEnabled`, `focused` |
-| ✅      | `Button`           | `.lensButton(id:)`           | `isEnabled`, tap                |
-| ✅      | `NavigationLink`   | `.lensButton(id:)`           | `isEnabled`, tap                |
+| ✅      | `Button`           | `.lensButton(id:)`           | `isEnabled`, `role`                |
+| ✅      | `NavigationLink`   | `.lensButton(id:)`           | `isEnabled`, `role`                |
 | ❌      | `Link`             | –                            | no tracking yet                 |
 | ❌      | `Menu`             | –                            | not yet tracked                 |
 | ❌      | `ShareLink`        | –                            | not yet tracked                 |
@@ -31,7 +31,6 @@ This table shows how to simulate user interactions for each supported view using
 
 | View Type                   | Interactor Method                              | Example Usage                                    | Notes                                      |
 | --------------------------- | ---------------------------------------------- | ------------------------------------------------ | ------------------------------------------ |
-| **Button**                  | `tapButton(withID:)`                           | `sut.interactor.tapButton(withID: "submit")`     | Triggers `action` block                    |
 | **Toggle**                  | `toggle(withID:)`<br>`toggle(withID:to:)`      | `toggle(id)` → toggles<br>`toggle(id, to: true)` | Updates bound value                        |
 | **Picker**                  | `picker(withID:to:)`                           | `picker(id, to: .optionA)`                       | Supports `Picker`, `DatePicker`            |
 | **Slider**                  | `slider(withID:to:)`                           | `slider(id, to: 0.5)`                            | Sends final value (on editing end)         |
@@ -39,8 +38,8 @@ This table shows how to simulate user interactions for each supported view using
 | **TextField**               | `textField(withID:to:)`                        | `textField(id, to: "email@example.com")`         | Updates text                               |
 |                             | `textFieldMakeFocus(withID:)`<br>`...NotFocus` | `makeFocus(id)` → focus<br>`notFocus(id)` → blur | Focus state simulation                     |
 | **Searchable**              | `textField(withID:to:)`                        | same as `TextField`                              | Binds to internal `TextField`              |
-| **NavigationLink**          | *(No direct interactor)*                       | –                                                | Tapping only works outside List            |
-| **Sheet / FullScreenCover** | *(Driven via `@Binding`)*                      | Set state directly in test                       | No `interactor` method; use VM/state setup |
+| **Button**                  | `tapButton(withID:)`                           | `sut.interactor.tapButton(withID: "submit")`     | Triggers `action` block                    |
+| **NavigationLink**          | `tapButton(withID:)`                           | `sut.interactor.tapButton(withID: "submit")`     | Triggers `action` block                    |
 
 
 ### Example
@@ -121,16 +120,15 @@ try await sut.observer.waitForViewCount(withViewIDPrefix: "item.", expected: 5)
 
 These modifiers allow testing of modal navigation and presented content.
 
-| Status | View Type            | Lens Modifier                           | Trackable Attributes                 |
-| ------ | -------------------- | --------------------------------------- | ------------------------------------ |
+| Status | View Type            | Lens Modifier                           | Trackable Attributes                 | Issues |
+| ------ | -------------------- | --------------------------------------- | ------------------------------------ |--------|
 | ✅      | `sheet`              | `.lensSheet(id:isPresented:)`           | child views inside sheet            |
 | ✅      | `sheet(item:)`       | `.lensSheet(id:item:)`                  | child views inside sheet            |
 | ✅      | `fullScreenCover`    | `.lensFullScreenCover(id:isPresented:)` | child views inside fullScreenCover  |
 | ✅      | `fullScreenCover(item:)` | `.lensFullScreenCover(id:item:)`.   | child views inside fullScreenCover  |
-| ✅      | `NavigationLink`     | `.lensButton(id:)`                      | isFocused (use SwiftLens instead of List when used inside NavigationStack)  |
-| ❌      | `Popover`            | –                                       | no tracking yet                      |
-| ❌      | `Alert`              | –                                       | not yet supported                    |
-| ❌      | `ActionShee          | –                                       | not yet supported                    |
+| ✅      | `Alert`              | `.lensAlert(id:isPresented:actions:)`        | action buttons inside alert    | cannot close alert during testing |
+| ❌      | `Popover`            | –                                       | -                  |
+| ❌      | `ActionSheet`          | –                                       | -                   |
 | ❌      | `ConfirmationDialog` | –                                       | –                                    |
 
 You can track and simulate navigation flows. For the following NavigationStack:
