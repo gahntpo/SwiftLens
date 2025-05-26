@@ -1,16 +1,9 @@
-//
-//  Test.swift
-//  SwiftLens
-//
-//  Created by Karin Prater on 26/05/2025.
-//
-
 import Foundation
 import Testing
 @testable import SwiftLens
 @testable import SwiftLensTestSupport
 
-struct LensSheetTests {
+struct PresentationViewTests {
 
     @Suite("Sheets with Boolean Toggle")
     struct DemoSheetBooleanTests {

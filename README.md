@@ -2,6 +2,8 @@
 
 SwiftLens helps you ship SwiftUI apps faster by making behavior-driven tests easy, stable, and precise. It tracks real visible view state using SwiftUI preferences and simulates user interaction without relying on XCUITest
 
+You can read about the internal working of this package here: [Discovering PreferenceKeys for SwiftUI’s Testing](https://www.swiftyplace.com/blog/swiftui-testing-with-preferencekeys)
+
 ## Features
 
 📬 Run your UI tests like unit tests with XCTest/Swift Testing
