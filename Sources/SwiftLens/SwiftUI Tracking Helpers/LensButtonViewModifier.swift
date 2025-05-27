@@ -7,8 +7,10 @@
 import SwiftUI
 
 extension Button {
-    public func lensButton(id: String) -> some View {
-        self.buttonStyle(LensButtonStyle(accessibilityIdentifier: id))
+    public func lensButton(id: String,
+                           info: [String : AnyHashable] = [:]) -> some View {
+        self.buttonStyle(LensButtonStyle(accessibilityIdentifier: id,
+                                         info: info))
     }
 }
 
@@ -31,11 +33,15 @@ extension NavigationLink {
 public struct LensButtonStyle: PrimitiveButtonStyle {
 
     public let accessibilityIdentifier: String
+    let info: [String : AnyHashable]
+    
     @Environment(\.notificationCenter) var notificationCenter
     @Environment(\.isEnabled) var isEnabled
     
-    public init(accessibilityIdentifier: String) {
+    public init(accessibilityIdentifier: String,
+                info: [String : AnyHashable] = [:]) {
         self.accessibilityIdentifier = accessibilityIdentifier
+        self.info = info
     }
     
     public func makeBody(configuration: Configuration) -> some View {
@@ -46,10 +52,6 @@ public struct LensButtonStyle: PrimitiveButtonStyle {
             )
       //TODO: only add notification if custom flag is set
      // #if DEBUG
-          .simultaneousGesture(TapGesture().onEnded({ _ in
-              sendButtonNotification()
-          }))
-      // #endif
           .onReceive(notificationCenter.publisher(for: .simulateButtonTap)) { notification in
               if let id = notification.userInfo?["id"] as? String,
                  self.accessibilityIdentifier == id {
@@ -66,19 +68,20 @@ public struct LensButtonStyle: PrimitiveButtonStyle {
     }
     
     func info(for configuration: PrimitiveButtonStyleConfiguration) -> [String: AnyHashable] {
-
-        guard let role = configuration.role else {
-            return ["isEnabled" : isEnabled,
-                    "role": 0]
-        }
+        var info = self.info
+        info["isEnabled"] = isEnabled
         
-        switch role {
-            case .cancel: return ["isEnabled" : isEnabled, "role": 4]
-            case .destructive: return ["isEnabled" : isEnabled, "role": 1]
-            default:
-                return ["isEnabled" : isEnabled, "role": 0]
+        if let role = configuration.role {
+            switch role {
+                case .cancel: info["role"] = 4
+                case .destructive: info["role"] = 1
+                default:
+                    info["role"] = 0
+            }
+        } else {
+            info["role"] = 0
         }
-        
+        return info
     }
 }
 

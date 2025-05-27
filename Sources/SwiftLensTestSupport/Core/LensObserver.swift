@@ -131,7 +131,7 @@ final class LensObserver: ObservableObject {
             {
                 $0.flattened().filter { $0.identifier.hasPrefix(withViewIDPrefix) }.count == expected
             },
-            errorMessage: "Expected view visible with identifier prefix: '\(withViewIDPrefix)' visible \(expected) times",
+            errorMessage: "Expected view visible with identifier prefix: '\(withViewIDPrefix)' visible \(expected) times but found \(self.viewCount(withIDPrefix: withViewIDPrefix))",
             timeout: timeout
         )
     }
@@ -149,10 +149,11 @@ final class LensObserver: ObservableObject {
     public func wait<T: Equatable>(forViewID id: String,
                                     infoKey: String = "value",
                                     equals expected: T,
+                                   errorMessage: String? = nil,
                                     timeout: TimeInterval = 1.0) async throws {
         try await $values.waitUntilMatches(
             { $0.findView(withID: id)?.info[infoKey] as? T == expected },
-            errorMessage: "Expected value `\(expected)` for view with id: \(id)",
+            errorMessage: errorMessage ?? "Expected value `\(expected)` for view with id: \(id)",
             timeout: timeout
         )
     }
@@ -182,6 +183,6 @@ final class LensObserver: ObservableObject {
     public func waitButton(forViewID id: String, isEnabled: Bool)  async throws  {
         try await wait(forViewID: id,
                                infoKey: "isEnabled",
-                               equals: isEnabled)
+                       equals: isEnabled, errorMessage: "Expected that Button \(id) should be \(isEnabled ? "enabled" : "disabled")")
     }
 }

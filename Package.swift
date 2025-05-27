@@ -10,7 +10,7 @@ let package = Package(
         .library(name: "SwiftLens", targets: ["SwiftLens"]),
         .library(name: "SwiftLensTestSupport", targets: ["SwiftLensTestSupport"]),
     ],
-    dependencies: [],                                 // ← hier
+    dependencies: [],                             
     targets: [
         .target(
             name: "SwiftLens",

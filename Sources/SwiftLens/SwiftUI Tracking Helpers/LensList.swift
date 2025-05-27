@@ -7,6 +7,40 @@
 import SwiftUI
 
 
+extension View {
+    public func lensSwipeActions<T: View>(edge: HorizontalEdge = .trailing,
+                                    allowsFullSwipe: Bool = true,
+                                          @ViewBuilder content: @escaping () -> T) -> some View {
+        modifier(LensSwipeAction(edge: edge,
+                                 allowsFullSwipe: allowsFullSwipe,
+                                 action: content))
+   }
+}
+
+struct LensSwipeAction<ActionContent: View>: ViewModifier {
+    
+    var isRunningTests: Bool {
+        return ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
+    
+    let edge: HorizontalEdge
+    let allowsFullSwipe: Bool
+    let action: () -> ActionContent
+    
+    func body(content: Content) -> some View {
+        if isRunningTests {
+            content
+                .background(alignment: .trailing) {
+                    action()
+                }
+        } else {
+            content
+                .swipeActions(edge: edge, allowsFullSwipe: allowsFullSwipe, content: action)
+        }
+    }
+}
+
+
 /// A flexible list container that behaves differently in test vs production environments
 public struct LensList<Content: View>: View {
     
@@ -60,7 +94,7 @@ extension LensList {
     }
 }
 
-
+/*
 extension LensList {
     /// Creates a list that computes its rows on demand from an underlying collection of identifiable data.
     public init<Data, RowContent>(_ data: Data, @ViewBuilder rowContent: @escaping (Data.Element) -> RowContent)
@@ -95,3 +129,4 @@ extension LensList {
         self.init(content: ForEach(data, id: \.id, content: rowContent))
     }
 }
+*/

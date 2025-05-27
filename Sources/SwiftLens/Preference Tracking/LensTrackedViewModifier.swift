@@ -27,5 +27,7 @@ extension View {
                              children: metadata)
             ]
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(id)
     }
 }
