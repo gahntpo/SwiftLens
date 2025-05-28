@@ -12,6 +12,13 @@ final class LensObserver: ObservableObject {
     
     @Published public var values: [LensCapture] = []
     
+    // onFailure closure is called to take attachments for XCTest
+    public var onFailure: ((String) -> Void)? = nil
+    
+    public func setFailureHandler(_ handler: @escaping (String) -> Void) {
+        self.onFailure = handler
+    }
+    
    public func printValues() {
        print("---- Values ---")
        _ = values.map { print("- " + $0.description )}
@@ -112,7 +119,9 @@ final class LensObserver: ObservableObject {
             { $0.containsView(withID: id) },
             errorMessage: "Expected view visible with identifier: \(id)",
             timeout: timeout
-        )
+        ) { [onFailure] in
+                onFailure?("Expected view visible with identifier: \(id)")
+            }
     }
 
     public func waitForViewHidden(withID id: String,
@@ -121,7 +130,9 @@ final class LensObserver: ObservableObject {
             { !$0.containsView(withID: id) },
             errorMessage: "Expected view hidden with identifier: \(id)",
             timeout: timeout
-        )
+        ) { [onFailure] in
+            onFailure?("Expected view hidden with identifier: \(id)")
+        }
     }
     
     public func waitForViewCount(withViewIDPrefix: String,
@@ -133,7 +144,9 @@ final class LensObserver: ObservableObject {
             },
             errorMessage: "Expected view visible with identifier prefix: '\(withViewIDPrefix)' visible \(expected) times but found \(self.viewCount(withIDPrefix: withViewIDPrefix))",
             timeout: timeout
-        )
+        ) { [onFailure] in
+            onFailure?("Expected view visible with identifier prefix: '\(withViewIDPrefix)' visible")
+        }
     }
 
     public func waitForView(withID id: String,
@@ -143,7 +156,9 @@ final class LensObserver: ObservableObject {
             { $0.findView(withID: id)?.info["value"] as? String == expected },
             errorMessage: "Expected value `\(expected)` for view with id: \(id)",
             timeout: timeout
-        )
+        ) { [onFailure] in
+            onFailure?("Expected value `\(expected)` for view with id: \(id)")
+        }
     }
 
     public func wait<T: Equatable>(forViewID id: String,
@@ -155,7 +170,9 @@ final class LensObserver: ObservableObject {
             { $0.findView(withID: id)?.info[infoKey] as? T == expected },
             errorMessage: errorMessage ?? "Expected value `\(expected)` for view with id: \(id)",
             timeout: timeout
-        )
+        ) { [onFailure] in
+            onFailure?(errorMessage ?? "Expected value `\(expected)` for view with id: \(id)")
+        }
     }
     
     public func waitForValue<T: Equatable>(forViewID id: String,
@@ -165,7 +182,9 @@ final class LensObserver: ObservableObject {
             { $0.findView(withID: id)?.info["value"] as? T == expected },
             errorMessage: "Expected value `\(expected)` for view with id: \(id)",
             timeout: timeout
-        )
+        ) { [onFailure] in
+            onFailure?("Expected value `\(expected)` for view with id: \(id)")
+        }
     }
     
     public func waitForTextFieldFocused(withID id: String,
@@ -175,10 +194,10 @@ final class LensObserver: ObservableObject {
             { $0.findView(withID: id)?.info["focused"] as? Bool == isFocused  },
             errorMessage: "Expected textfield focused with identifier: \(id) - \(isFocused ? "focused" : "not focused")",
             timeout: timeout
-        )
+        ) { [onFailure] in
+            onFailure?("Expected textfield focused with identifier: \(id) - \(isFocused ? "focused" : "not focused")")
+        }
     }
-    
-
     
     public func waitButton(forViewID id: String, isEnabled: Bool)  async throws  {
         try await wait(forViewID: id,

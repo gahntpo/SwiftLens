@@ -64,20 +64,12 @@ public struct LensWorkBench {
         hostingController.didMove(toParent: rootVC)
         window.layoutIfNeeded()
         
-        /*
-         
-       // 0.346sec
-         let hostingController = UIHostingController(rootView: rootView)
-         self.hostingController = hostingController
-         
-         // Create a navigation controller and set it as the window's root
-         let navController = UINavigationController(rootViewController: hostingController)
-         window.rootViewController = navController
-
-        // Force layout
-         window.layoutIfNeeded()
-         */
+        // Inject failure handler
+        expectations.setFailureHandler { [self] message in
+            self.attachSnapshotToXCTest(name: message)
+        }
     }
+    
     
     //MARK: - observation together with interactions
     func waitForAndTapButton(_ id: String) async throws {

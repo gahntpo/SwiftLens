@@ -94,7 +94,6 @@ extension LensList {
     }
 }
 
-/*
 extension LensList {
     /// Creates a list that computes its rows on demand from an underlying collection of identifiable data.
     public init<Data, RowContent>(_ data: Data, @ViewBuilder rowContent: @escaping (Data.Element) -> RowContent)
@@ -129,4 +128,3 @@ extension LensList {
         self.init(content: ForEach(data, id: \.id, content: rowContent))
     }
 }
-*/

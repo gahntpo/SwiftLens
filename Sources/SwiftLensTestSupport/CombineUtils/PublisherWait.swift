@@ -47,7 +47,8 @@ extension Published.Publisher where Value: Equatable {
     public func waitUntilMatches(
         _ predicate: @escaping (Value) -> Bool,
         errorMessage: String = "waitUntilMatches failed",
-        timeout: TimeInterval = 1.0
+        timeout: TimeInterval = 1.0,
+        onFailure: (() -> Void)? = nil
     ) async throws {
         let subject = PassthroughSubject<Value, Error>()
         var cancellables = Set<AnyCancellable>()
@@ -64,6 +65,7 @@ extension Published.Publisher where Value: Equatable {
             .merge(with: timeoutPublisher)
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
+                    onFailure?()
                     subject.send(completion: .failure(error))
                 }
             }, receiveValue: { value in
