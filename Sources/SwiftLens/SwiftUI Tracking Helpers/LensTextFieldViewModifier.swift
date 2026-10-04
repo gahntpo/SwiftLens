@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 extension TextField {
     public  func lensTextField(id: String,
                                text: Binding<String>) -> some View {
@@ -15,6 +16,7 @@ extension TextField {
     }
 }
 
+@MainActor
 extension TextEditor {
     public func lensTextEditor(id: String,
                                text: Binding<String>) -> some View {
@@ -23,6 +25,7 @@ extension TextEditor {
     }
 }
 
+@MainActor
 extension SecureField {
     public func lensSecureTextField(id: String,
                                     text: Binding<String>) -> some View {

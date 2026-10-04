@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 extension Stepper {
    public func lensStepper<V: Strideable & Hashable>(
         id: String,

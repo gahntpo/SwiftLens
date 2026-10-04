@@ -6,14 +6,18 @@
 //
 
 import SwiftLens
+#if os(iOS) || os(visionOS)
 import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 
 extension LensWorkBench {
     
     /// 📸 Saving a snapshot of the current UI state to disk
     ///
     /// This includes:
-    /// - A screenshot of the visible window (`UIImage`).
+    /// - A screenshot of the visible window (`UIImage`/`NSImage`).
     /// - A `.plist` file representing the captured view hierarchy (`LensCapture`).
     /// - A `.txt` dump of the same hierarchy for human-readable inspection.
     ///
@@ -72,6 +76,7 @@ public enum SnapshotNamer {
     }
 }
 
+#if os(iOS) || os(visionOS)
 extension UIWindow {
     func asImage() -> UIImage? {
         let renderer = UIGraphicsImageRenderer(bounds: bounds)
@@ -80,26 +85,48 @@ extension UIWindow {
         }
     }
 }
+#elseif os(macOS)
+extension NSWindow {
+    func asImage() -> NSImage? {
+        guard let contentView = contentView else { return nil }
+        let image = NSImage(size: contentView.frame.size)
+        image.lockFocus()
+        if let context = NSGraphicsContext.current?.cgContext {
+            contentView.layer?.render(in: context)
+        }
+        image.unlockFocus()
+        return image
+    }
+}
+
+extension NSImage {
+    /// Mirrors `UIImage.pngData()` so screenshot code can be shared across platforms.
+    func pngData() -> Data? {
+        guard let tiff = tiffRepresentation,
+              let bitmap = NSBitmapImageRep(data: tiff) else { return nil }
+        return bitmap.representation(using: .png, properties: [:])
+    }
+}
+#endif
 
 //MARK: - converting LensCapture to file content
 
 public struct LensCaptureCodable: Codable {
     let viewType: String
     let identifier: String
-    let info: [String: String]   // everything stringified
+    let info: [String: String]
     let children: [LensCaptureCodable]
     
     init(from capture: LensCapture) {
         self.viewType = capture.viewType
         self.identifier = capture.identifier
-        self.info = capture.info.mapValues { "\($0)" }  // string fallback
+        self.info = capture.info.mapValues { "\($0)" }
         self.children = capture.children.map(LensCaptureCodable.init)
     }
 }
 
 extension LensObserver {
     
-    /// Converts the current observer state into property list–encoded data.
     public func propertyListData() -> Data? {
         do {
             let codableHierarchy = values.map { LensCaptureCodable(from: $0) }
@@ -110,18 +137,15 @@ extension LensObserver {
         }
     }
     
-    
     public func hierarchyTextDump() -> String {
         func describe(_ capture: LensCapture, prefix: String = "", isLast: Bool = true) -> [String] {
             let bullet = isLast ? "└─" : "├─"
             var lines: [String] = ["\(prefix)\(bullet) \(capture.identifier)"]
             
-            // Add info entries
             for (key, value) in capture.info.sorted(by: { $0.key < $1.key }) {
                 lines.append("\(prefix)\(isLast ? "   " : "│  ")  • \(key): \(value)")
             }
             
-            // Describe children
             let childPrefix = prefix + (isLast ? "   " : "│  ")
             for (index, child) in capture.children.enumerated() {
                 let isLastChild = index == capture.children.count - 1
@@ -140,7 +164,7 @@ extension LensObserver {
         for (index, root) in values.enumerated() {
             let isLast = index == values.count - 1
             output.append(contentsOf: describe(root, isLast: isLast))
-            output.append("") // Visual break between root nodes
+            output.append("")
         }
         
         return output.joined(separator: "\n")

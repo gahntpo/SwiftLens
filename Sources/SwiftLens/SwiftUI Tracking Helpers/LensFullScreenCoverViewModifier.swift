@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(iOS) || os(visionOS)
 extension View {
     public func lensFullScreenCover<Content: View>(
         id: String,
@@ -36,8 +37,8 @@ extension View {
 }
 
 /// A view modifier that presents a fullScreenCover but also captures any
-/// LensCapture emitted by the sheet’s content and re‑publishes it
-/// on the parent view’s LensCaptureKey.
+/// LensCapture emitted by the sheet's content and re‑publishes it
+/// on the parent view's LensCaptureKey.
 ///
 struct LensFullScreenCoverIsPresentedModifier<FullScreenCoverContent: View>: ViewModifier {
     
@@ -46,7 +47,6 @@ struct LensFullScreenCoverIsPresentedModifier<FullScreenCoverContent: View>: Vie
     let onDismiss: (() -> Void)?
     let fullScreenCoverContent: () -> FullScreenCoverContent
 
-    // Holds the latest preferences coming out of the sheet
     @State private var liftedPreferences: [LensCapture] = []
     
     var passedPreferences: [LensCapture] {
@@ -95,7 +95,6 @@ private struct LensFullScreenCoverItemModifier<Item: Identifiable & Equatable, F
     @ViewBuilder
     func body(content: Content) -> some View {
         content
-           // Re‑emit the sheet’s prefs onto the parent’s preference tree
             .background {
                 Color.clear
                     .preference(key: LensCaptureKey.self,
@@ -109,3 +108,4 @@ private struct LensFullScreenCoverItemModifier<Item: Identifiable & Equatable, F
             })
     }
 }
+#endif

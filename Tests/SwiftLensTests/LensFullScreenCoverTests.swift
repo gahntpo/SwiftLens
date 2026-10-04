@@ -10,6 +10,7 @@ import Testing
 @testable import SwiftLens
 @testable import SwiftLensTestSupport
 
+#if os(iOS) || os(visionOS)
 struct LensFullScreenCoverTests {
 
     @Suite("FullScreenCover with Boolean Toggle")
@@ -107,3 +108,4 @@ struct LensFullScreenCoverTests {
         }
     }
 }
+#endif

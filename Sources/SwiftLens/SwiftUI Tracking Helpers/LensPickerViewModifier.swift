@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 extension Picker {
     public func lensPicker<V: Hashable>(
         id: String,
@@ -17,6 +18,7 @@ extension Picker {
     }
 }
 
+@MainActor
 extension DatePicker {
     public func lensPicker (
         id: String,
@@ -27,7 +29,9 @@ extension DatePicker {
     }
 }
 
+#if os(iOS) || os(visionOS)
 @available(iOS 16.0, *)
+@MainActor
 extension MultiDatePicker {
     public func lensPicker (
         id: String,
@@ -37,8 +41,10 @@ extension MultiDatePicker {
                                              selection: selection))
     }
 }
+#endif
 
 
+@MainActor
 extension ColorPicker {
     public func lensPicker (
         id: String,

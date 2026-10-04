@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(iOS) || os(visionOS)
 struct DemoFullScreenCoverView: View {
     
     @State private var fullScreenCoverIsShown = false
@@ -52,3 +53,4 @@ struct DemoFullScreenCoverItemView: View {
         })
     }
 }
+#endif

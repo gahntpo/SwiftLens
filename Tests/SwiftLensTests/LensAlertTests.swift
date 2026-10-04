@@ -26,8 +26,7 @@ struct LensAlertTests {
         }
         
         @MainActor
-        @Test("Alert disappears after closing",
-              .disabled("alert does not close"))
+        @Test("Alert disappears after closing")
         func alert_open_and_close() async throws {
             // ---- SYSTEM ----
             let sut = LensWorkBench { _ in
@@ -48,7 +47,6 @@ struct LensAlertTests {
             sut.interactor.tapButton(withID: "alert.button.clear")
             
             // ---- THEN ----
-            //ISSUE: alert does not reset preference keys
             try await sut.observer.waitForViewHidden(withID: "alert.content")
             
             try await sut.observer.waitForValue(forViewID: "countLabel", equals: 0)
@@ -75,8 +73,7 @@ struct LensAlertTests {
         }
         
         @MainActor
-        @Test("Alert open and close",
-            .disabled("alert does not cloase"))
+        @Test("Alert open and close")
         func alert_with_data_open_and_close() async throws {
             // ---- SYSTEM ----
             let sut = LensWorkBench { _ in
@@ -124,26 +121,24 @@ struct LensAlertTests {
         }
         
         @MainActor
-        @Test("Alert open and close",
-              .disabled("alert does not reset preference keys after closing"))
+        @Test("Alert open and close")
         func alert_open_and_close() async throws {
             // ---- GIVEN ----
             let sut = LensWorkBench { _ in
-                SaveButton()
+                DemoAlertErrorView()
             }
             
             //open alert
             sut.interactor.tapButton(withID: "button.show.alert")
             
-            try await sut.observer.waitForViewVisible(withID: "alert.content")
-            try await sut.observer.waitForViewVisible(withID: "alert.button.delete")
+            try await sut.observer.waitForViewVisible(withID: "alert")
+            try await sut.observer.waitForViewVisible(withID: "alert.button.okey")
             
             // ---- WHEN ----
-            sut.interactor.tapButton(withID: "alert.delete")
+            sut.interactor.tapButton(withID: "alert.button.okey")
             
             // ---- THEN ----
-            //ISSUE: alert does not reset preference keys
-            try await sut.observer.waitForViewHidden(withID: "alert.content")
+            try await sut.observer.waitForViewHidden(withID: "alert")
         }
     }
 }

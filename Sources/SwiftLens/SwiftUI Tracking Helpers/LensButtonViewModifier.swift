@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+@MainActor
 extension Button {
     public func lensButton(id: String,
                            info: [String : AnyHashable] = [:]) -> some View {
@@ -14,6 +15,7 @@ extension Button {
     }
 }
 
+@MainActor
 extension NavigationLink {
     public func lensButton(id: String) -> some View {
         self

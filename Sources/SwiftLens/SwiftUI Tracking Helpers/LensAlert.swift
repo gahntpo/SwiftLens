@@ -86,7 +86,7 @@ public struct LensAlertModifier<Actions: View, Message: View>: ViewModifier {
     var passedPreferences: [LensCapture] {
         guard isPresented else { return [] }
         guard !liftedPreferences.isEmpty else { return [] }
-        
+
         return [
             LensCapture(viewType: String(describing: Self.self),
                         identifier: accessibilityIdentifier,
@@ -98,6 +98,8 @@ public struct LensAlertModifier<Actions: View, Message: View>: ViewModifier {
         content
             .background(Color.clear.preference(key: LensCaptureKey.self,
                                                value: passedPreferences))
+            .modifier(DismissOnSimulatedButtonTap(isPresented: $isPresented,
+                                                  alertContent: liftedPreferences))
             .alert(title,
                    isPresented: $isPresented,
                    actions: {
@@ -136,7 +138,9 @@ public struct LensAlertWithDataModifier<T, Actions: View, Message: View>: ViewMo
     public func body(content: Content) -> some View {
         content
             .background(Color.clear.preference(key: LensCaptureKey.self, value: liftedCapture))
-        
+            .modifier(DismissOnSimulatedButtonTap(isPresented: $isPresented,
+                                                  alertContent: capturedChildren))
+
             .alert(title,
                    isPresented: $isPresented,
                    presenting: data,
@@ -182,6 +186,8 @@ struct LensAlertWithErrorModifier<E: LocalizedError, Actions: View, Message: Vie
         content
             .background(Color.clear.preference(key: LensCaptureKey.self,
                                                value: liftedCapture))
+            .modifier(DismissOnSimulatedButtonTap(isPresented: $isPresented,
+                                                  alertContent: capturedChildren))
             .alert(isPresented: $isPresented,
                    error: error,
                    actions: { error in
@@ -189,5 +195,26 @@ struct LensAlertWithErrorModifier<E: LocalizedError, Actions: View, Message: Vie
                     .onPreferenceChange(LensCaptureKey.self) { capturedChildren = $0 }
             },
                    message: message)
+    }
+}
+
+//MARK: - Simulated Dismiss
+
+/// A simulated tap only triggers the button action. The system alert dismisses
+/// itself on a real tap, so mimic that for buttons tracked inside the alert.
+private struct DismissOnSimulatedButtonTap: ViewModifier {
+    @Binding var isPresented: Bool
+    let alertContent: [LensCapture]
+
+    @Environment(\.notificationCenter) var notificationCenter
+
+    func body(content: Content) -> some View {
+        content
+            .onReceive(notificationCenter.publisher(for: .simulateButtonTap)) { notification in
+                guard isPresented,
+                      let id = notification.userInfo?["id"] as? String,
+                      alertContent.containsView(withID: id) else { return }
+                isPresented = false
+            }
     }
 }

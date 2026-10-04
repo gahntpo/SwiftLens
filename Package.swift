@@ -10,26 +10,25 @@ let package = Package(
         .library(name: "SwiftLens", targets: ["SwiftLens"]),
         .library(name: "SwiftLensTestSupport", targets: ["SwiftLensTestSupport"]),
     ],
-    dependencies: [],                             
+    dependencies: [],
     targets: [
         .target(
             name: "SwiftLens",
-            swiftSettings: [
-                .unsafeFlags(["-swift-version", "5.5"])
+            linkerSettings: [
+                .linkedFramework("SwiftUI"),
             ]
         ),
         .target(
             name: "SwiftLensTestSupport",
             dependencies: ["SwiftLens"],
-            path: "Sources/SwiftLensTestSupport"
+            path: "Sources/SwiftLensTestSupport",
+            linkerSettings: [
+                .linkedFramework("SwiftUI"),
+            ]
         ),
         .testTarget(
             name: "SwiftLensTests",
-            dependencies: ["SwiftLens", "SwiftLensTestSupport"],
-            swiftSettings: [
-                .unsafeFlags(["-swift-version", "5.5"])
-            ]
-        )
+            dependencies: ["SwiftLens", "SwiftLensTestSupport"]
+        ),
     ]
 )
-

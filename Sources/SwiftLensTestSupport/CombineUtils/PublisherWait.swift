@@ -58,7 +58,7 @@ extension Published.Publisher where Value: Equatable {
             .eraseToAnyPublisher()
         
         let valuePublisher = self
-            .mapError { $0 as Error }
+            .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
         
         valuePublisher

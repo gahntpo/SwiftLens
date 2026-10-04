@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+@MainActor
 extension Toggle {
     public func lensToggle(id: String,
                            value: Binding<Bool>) -> some View {
